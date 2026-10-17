@@ -1,29 +1,6 @@
-.directorySection { padding: 80px 0 92px; background: var(--canvas); border-block: 1px solid #e8edf4; }
+.directorySection { padding: 80px 0 92px; background: var(--canvas); border-block: 1px solid var(--line); }
 .directoryHeading { text-align: center; }
 .directoryHeading p { margin-inline: auto; }
-.collectionDivider { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 14px; margin: 4px auto 32px; color: #8390a5; font-size: .72rem; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
-.collectionDivider::before, .collectionDivider::after { content: ""; height: 1px; background: #cfd9e6; }
-.collectionGrid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 20px; }
-.collectionCard { --collection-accent: var(--blue); min-width: 0; display: flex; flex-direction: column; padding: 10px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); box-shadow: 0 8px 24px rgba(38,78,119,.11); }
-.accentPink { --collection-accent: #ed3d87; } .accentBlue { --collection-accent: #0876d1; } .accentViolet { --collection-accent: #7257d9; } .accentOrange { --collection-accent: #d26b13; } .accentGreen { --collection-accent: #147a4b; } .accentCyan { --collection-accent: #008da8; } .accentRed { --collection-accent: #c83e4d; } .accentNavy { --collection-accent: #14213d; }
-.collectionHeader { min-height: 58px; display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-bottom: 2px solid transparent; border-image: linear-gradient(90deg,#65b8ff,#a467f3,#ff6f91,#ff9d54) 1; }
-.collectionHeader h3 { margin: 0; font-size: .9rem; letter-spacing: .01em; }
-.collectionIcon { width: 28px; height: 28px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 8px; color: var(--collection-accent); background: color-mix(in srgb,var(--collection-accent) 10%,var(--surface)); font-size: .92rem; font-weight: 900; }
-.collectionList { list-style: none; margin: 12px 0 18px; padding: 0 8px; counter-reset: tool-row; }
-.collectionList li { counter-increment: tool-row; border-bottom: 1px solid #e9eef4; }
-.collectionList li:last-child { border-bottom: 0; }
-.collectionList a { min-height: 46px; display: grid; grid-template-columns: 20px 32px minmax(0,1fr) 20px; align-items: center; gap: 8px; color: var(--text); font-size: .82rem; }
-.collectionList a::before { content: counter(tool-row) "."; color: #9aa6b7; font-size: .74rem; text-align: right; }
-.collectionList a:hover { color: var(--collection-accent); }
-.collectionLogo { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 8px; color: var(--collection-accent); background: color-mix(in srgb,var(--collection-accent) 9%,var(--surface)); font-size: .6rem; font-weight: 900; }
-.collectionList a > span:nth-child(3) { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.rowArrow { color: #b4bfcd; font-size: .86rem; text-align: right; }
-.collectionList a:hover .rowArrow { color: var(--collection-accent); transform: translate(1px,-1px); }
-.collectionFooter { min-height: 42px; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: auto; border-radius: 9px; color: var(--ink); background: var(--surface-soft); font-size: .72rem; font-weight: 800; letter-spacing: .035em; }
-.collectionFooter:hover { color: var(--collection-accent); background: color-mix(in srgb,var(--collection-accent) 7%,var(--surface)); }
-.collectionActions { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 42px 0 54px; }
-.moreCategories { min-height: 50px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 0 20px; border: 1px solid #6899c2; border-radius: 11px; color: var(--blue); background: var(--surface); font-size: .86rem; font-weight: 800; }
-.moreCategories:hover { border-color: var(--blue); background: var(--surface-soft); }
 .filterPanel { display: grid; grid-template-columns: minmax(280px,1.5fr) repeat(3,minmax(145px,.7fr)); gap: 10px; padding: 13px; border: 1px solid var(--line); border-radius: 15px; background: var(--surface); box-shadow: var(--shadow-sm); }
 .filterPanel label { display: block; min-width: 0; }
 .filterPanel input, .filterPanel select { width: 100%; height: 46px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink); background: var(--surface); padding: 0 13px; font-size: .83rem; }
@@ -38,12 +15,8 @@
 .textButton:hover { text-decoration: underline; }
 .toolGrid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; }
 .emptyState { padding: 65px 20px; border: 1px dashed var(--line); border-radius: var(--radius); text-align: center; background: var(--surface); }
-.emptyState h3 { margin: 0; } .emptyState p { color: var(--text); } .emptyState button { border: 0; }
-@media (max-width: 1100px) { .collectionGrid { grid-template-columns: repeat(3,minmax(0,1fr)); } }
-@media (max-width: 820px) { .collectionGrid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+.emptyState h3 { margin: 0; }
+.emptyState p { color: var(--text); }
+.emptyState button { border: 0; }
 @media (max-width: 1000px) { .toolGrid { grid-template-columns: repeat(2,minmax(0,1fr)); } .filterPanel { grid-template-columns: 1fr 1fr; } .searchField { grid-column: 1/-1; } }
-@media (max-width: 620px) {
-  .directorySection { padding-block: 65px; } .collectionDivider { margin-bottom: 24px; gap: 9px; font-size: .64rem; } .collectionGrid { grid-template-columns: 1fr; gap: 15px; } .collectionCard { padding: 9px; } .collectionList { margin-bottom: 14px; } .collectionActions { display: grid; margin: 30px 0 44px; } .collectionActions a { width: 100%; } .filterPanel { grid-template-columns: 1fr; } .searchField { grid-column: auto; }
-  .filterPanel input, .filterPanel select { height: 48px; } .resultsBar { align-items: flex-start; padding-block: 10px; }
-  .resultsBar > div { flex-direction: column; align-items: flex-end; gap: 2px; } .toolGrid { grid-template-columns: 1fr; }
-}
+@media (max-width: 620px) { .directorySection { padding-block: 65px; } .filterPanel { grid-template-columns: 1fr; } .searchField { grid-column: auto; } .filterPanel input, .filterPanel select { height: 48px; } .resultsBar { align-items: flex-start; padding-block: 10px; } .resultsBar > div { flex-direction: column; align-items: flex-end; gap: 2px; } .toolGrid { grid-template-columns: 1fr; } }

@@ -65,7 +65,7 @@ export default function Header() {
 
           <nav className={styles.desktopNav} aria-label="Main navigation">
             <Link href="/#directory">Find tools</Link>
-            <Link href="/#categories">Categories</Link>
+            <Link href="/categories/">Categories</Link>
             <Link href="/#how-it-works">How we review</Link>
             <Link href="/#guides">Guides</Link>
           </nav>
@@ -92,7 +92,8 @@ export default function Header() {
         {menuOpen && (
           <nav className={styles.mobileNav} aria-label="Mobile navigation">
             <Link href="/#directory" onClick={() => setMenuOpen(false)}>Find tools</Link>
-            <Link href="/#categories" onClick={() => setMenuOpen(false)}>Categories</Link>
+            <Link href="/categories/" onClick={() => setMenuOpen(false)}>Categories</Link>
+            <Link href="/submit/" onClick={() => setMenuOpen(false)}>Submit a tool</Link>
             <Link href="/#how-it-works" onClick={() => setMenuOpen(false)}>How we review</Link>
             <Link href="/#guides" onClick={() => setMenuOpen(false)}>Guides</Link>
             <button type="button" onClick={showSaved}>Saved tools ({savedCount})</button>

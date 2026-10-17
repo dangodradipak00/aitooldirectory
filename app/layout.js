@@ -7,10 +7,14 @@ export const metadata = {
   },
   description: 'Explore reporting, SEO and call tracking software for small marketing agencies.',
   robots: {
-    index: false,
-    follow: false,
-    nocache: true
+    index: true,
+    follow: true
   }
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1
 };
 
 const themeScript = `

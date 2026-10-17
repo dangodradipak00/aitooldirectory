@@ -1,17 +1,17 @@
 import Link from 'next/link';
 import { BookmarkIcon, ExternalIcon } from './Icons';
-import { getCategory } from '../data/tools';
+import { getCategory } from '../data/categories';
 import styles from './ToolCard.module.css';
 
 export default function ToolCard({ tool, saved = false, onSave }) {
-  const category = getCategory(tool.category);
+  const category = getCategory(tool.primaryCategoryId);
   return (
     <article className={styles.toolCard}>
       <div className={styles.toolCardTop}>
         <div className={`${styles.toolLogo} ${styles[`accent${category.accent[0].toUpperCase()}${category.accent.slice(1)}`]}`}>{tool.initials}</div>
         <div className={styles.toolTitleWrap}>
           <h3><Link href={`/tools/${tool.slug}/`}>{tool.name}</Link></h3>
-          <Link href={`/categories/${category.slug}/`} className={styles.toolCategory}>{category.shortName}</Link>
+          <Link href={`/categories/${category.slug}/`} className={styles.toolCategory}>{category.name}</Link>
         </div>
         {onSave && (
           <button className={`${styles.cardSave} ${saved ? styles.saved : ''}`} type="button" onClick={() => onSave(tool.slug)} aria-pressed={saved} aria-label={`${saved ? 'Remove' : 'Save'} ${tool.name}`}>

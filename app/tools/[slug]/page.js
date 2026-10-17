@@ -4,14 +4,15 @@ import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import ToolCard from '../../../components/ToolCard';
 import { ArrowIcon, ExternalIcon } from '../../../components/Icons';
-import { categories, getCategory, getTool, getToolsByCategory, tools } from '../../../data/tools';
+import { getCategory } from '../../../data/categories';
+import { getTool, getToolCategories, getToolsByCategory, publishedTools } from '../../../data/tools';
 import styles from './page.module.css';
 import ui from '../../../styles/ui.module.css';
 
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return tools.map((tool) => ({ slug: tool.slug }));
+  return publishedTools.map((tool) => ({ slug: tool.slug }));
 }
 
 export async function generateMetadata({ params }) {
@@ -28,8 +29,9 @@ export default async function ToolPage({ params }) {
   const { slug } = await params;
   const tool = getTool(slug);
   if (!tool) notFound();
-  const category = getCategory(tool.category);
-  const relatedTools = getToolsByCategory(tool.category).filter((item) => item.slug !== tool.slug);
+  const category = getCategory(tool.primaryCategoryId);
+  const toolCategories = getToolCategories(tool);
+  const relatedTools = getToolsByCategory(tool.primaryCategoryId).filter((item) => item.slug !== tool.slug);
 
   return (
     <>
@@ -57,7 +59,7 @@ export default async function ToolPage({ params }) {
             </article>
             <aside className={styles.detailSidebar}>
               <h2>At a glance</h2>
-              <dl><div><dt>Category</dt><dd><Link href={`/categories/${category.slug}/`}>{category.name}</Link></dd></div><div><dt>Pricing model</dt><dd>{tool.pricing}</dd></div><div><dt>Listing status</dt><dd>Editorial preview</dd></div></dl>
+              <dl><div><dt>Categories</dt><dd>{toolCategories.map((item, index) => <span key={item.id}>{index > 0 && ', '}<Link href={`/categories/${item.slug}/`}>{item.name}</Link></span>)}</dd></div><div><dt>Pricing model</dt><dd>{tool.pricing}</dd></div><div><dt>Listing status</dt><dd>Editorial preview</dd></div></dl>
             </aside>
           </div>
         </section>

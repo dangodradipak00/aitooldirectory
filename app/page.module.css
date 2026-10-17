@@ -35,6 +35,9 @@
 .quickCard:hover { transform: translateY(-2px); border-color: #b7d5ed; box-shadow: var(--shadow-md); }
 .categoriesSection, .guidesSection { padding: 90px 0; }
 .categoryGrid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+.allCategoriesLink { display: flex; justify-content: center; margin-top: 30px; }
+.allCategoriesLink a { min-height: 48px; display: inline-flex; align-items: center; gap: 9px; padding: 0 19px; border: 1px solid var(--line); border-radius: 11px; color: var(--blue); background: var(--surface); font-size: .86rem; font-weight: 850; }
+.allCategoriesLink a:hover { border-color: #91bfe4; box-shadow: var(--shadow-sm); }
 .categoryCard { --accent: var(--blue); position: relative; min-height: 305px; display: flex; flex-direction: column; padding: 25px; overflow: hidden; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); box-shadow: var(--shadow-sm); transition: transform .16s ease,box-shadow .16s ease,border-color .16s ease; }
 .accentViolet { --accent: var(--violet); } .accentOrange { --accent: var(--orange); } .accentBlue { --accent: var(--blue); }
 .categoryCard::after { content: ""; position: absolute; width: 150px; height: 150px; right: -70px; top: -70px; border-radius: 50%; background: color-mix(in srgb,var(--accent) 12%,var(--surface)); }

@@ -1,8 +1,9 @@
 import Link from 'next/link';
-import { categories } from '../data/tools';
+import { getPopulatedPublicCategories } from '../lib/category-utils';
 import styles from './Footer.module.css';
 
 export default function Footer() {
+  const categories = getPopulatedPublicCategories();
   return (
     <footer className={styles.siteFooter}>
       <div className={`${styles.shell} ${styles.footerGrid}`}>
@@ -25,6 +26,8 @@ export default function Footer() {
           <h2>Directory</h2>
           <ul>
             <li><Link href="/#directory">Find tools</Link></li>
+            <li><Link href="/categories/">All categories</Link></li>
+            <li><Link href="/submit/">Submit a tool</Link></li>
             <li><Link href="/#how-it-works">Editorial approach</Link></li>
             <li><Link href="/#guides">Buying guides</Link></li>
           </ul>

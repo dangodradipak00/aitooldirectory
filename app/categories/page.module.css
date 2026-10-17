@@ -1,0 +1,5 @@
+.hero { padding: 72px 0 48px; text-align: center; background: var(--hero-bg); }
+.heroInner { max-width: 780px; }
+.hero h1 { margin: 16px 0 14px; font-size: clamp(2.6rem,6vw,4.5rem); line-height: 1; letter-spacing: -.06em; }
+.hero p { max-width: 650px; margin: 0 auto; color: var(--text); font-size: 1.02rem; }
+@media (max-width: 620px) { .hero { padding: 54px 0 38px; } }

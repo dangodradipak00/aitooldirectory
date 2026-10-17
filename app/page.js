@@ -1,19 +1,19 @@
 import Link from 'next/link';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import Directory from '../components/Directory';
+import HomepageCategories from '../components/HomepageCategories';
 import { ArrowIcon, ChartIcon, PhoneIcon, ReportIcon } from '../components/Icons';
-import { categories, tools } from '../data/tools';
+import { getCategory, homepageCategoryIds } from '../data/categories';
+import { getToolsByCategory, publishedTools } from '../data/tools';
 import styles from './page.module.css';
 import ui from '../styles/ui.module.css';
 
-const categoryIcons = {
-  'client-reporting': ReportIcon,
-  'seo-audits-rank-tracking': ChartIcon,
-  'call-tracking-attribution': PhoneIcon
-};
-
 export default function HomePage() {
+  const tools = publishedTools;
+  const homepageCategories = homepageCategoryIds.map((categoryId) => ({
+    category: getCategory(categoryId),
+    tools: getToolsByCategory(categoryId)
+  }));
   return (
     <>
       <Header />
@@ -28,7 +28,7 @@ export default function HomePage() {
               <p>Explore practical options for client reporting, SEO audits and call tracking—organized around the work your agency actually does.</p>
               <div className={styles.heroActions}>
                 <a href="#directory" className={ui.primaryButton}>Explore tools <ArrowIcon /></a>
-                <a href="#categories" className={ui.secondaryButton}>Browse categories</a>
+                <Link href="/categories/" className={ui.secondaryButton}>Browse categories</Link>
               </div>
               <div className={styles.heroNote}>
                 <strong>9 tools</strong><span /> <strong>3 focused categories</strong><span /> No account required
@@ -39,7 +39,7 @@ export default function HomePage() {
               <div className={styles.previewWindow}>
                 <div className={styles.previewWindowTop}><i /><i /><i /><span>Reporting shortlist</span></div>
                 <div className={styles.previewSearch}><span>⌕</span> client reporting</div>
-                {tools.filter((tool) => tool.category === 'client-reporting').map((tool, index) => (
+                {tools.filter((tool) => tool.primaryCategoryId === 'data-analytics').map((tool, index) => (
                   <div className={styles.miniTool} key={tool.slug}>
                     <span className={`${styles.miniLogo} ${styles[`mini${index + 1}`]}`}>{tool.initials}</span>
                     <span><strong>{tool.name}</strong><small>{tool.pricing}</small></span>
@@ -67,31 +67,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <Directory tools={tools} categories={categories} />
-
-        <section className={styles.categoriesSection} id="categories" aria-labelledby="categories-title">
-          <div className={ui.shell}>
-            <div className={`${ui.sectionHeading} ${ui.splitHeading}`}>
-              <div><span className={ui.eyebrow}>Focused collections</span><h2 id="categories-title">Browse by category</h2></div>
-              <p>Each collection explains the job, the buying questions and the tools worth reviewing.</p>
-            </div>
-            <div className={styles.categoryGrid}>
-              {categories.map((category) => {
-                const Icon = categoryIcons[category.slug];
-                const count = tools.filter((tool) => tool.category === category.slug).length;
-                return (
-                  <Link href={`/categories/${category.slug}/`} className={`${styles.categoryCard} ${styles[`accent${category.accent[0].toUpperCase()}${category.accent.slice(1)}`]}`} key={category.slug}>
-                    <span className={styles.categoryIcon}><Icon /></span>
-                    <span className={styles.categoryCount}>{count} tools</span>
-                    <h3>{category.name}</h3>
-                    <p>{category.description}</p>
-                    <span className={styles.categoryLink}>Explore category <ArrowIcon /></span>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </section>
+        <HomepageCategories categories={homepageCategories} />
 
         <section className={styles.methodSection} id="how-it-works" aria-labelledby="method-title">
           <div className={`${ui.shell} ${styles.methodLayout}`}>
