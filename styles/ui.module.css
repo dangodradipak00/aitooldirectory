@@ -1,0 +1,21 @@
+.shell { width: min(calc(100% - 40px), var(--shell)); margin-inline: auto; }
+.srOnly { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--blue); font-size: .75rem; line-height: 1.2; font-weight: 850; letter-spacing: .11em; text-transform: uppercase; }
+.primaryButton, .secondaryButton { min-height: 50px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; border-radius: 11px; padding: 0 20px; border: 1px solid transparent; font-weight: 780; font-size: .92rem; transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease, background-color .16s ease; }
+.primaryButton { color: white; background: var(--blue); box-shadow: 0 9px 24px rgba(8,118,209,.23); }
+.primaryButton:hover { background: var(--blue-dark); transform: translateY(-1px); }
+.secondaryButton { color: var(--ink); background: var(--surface); border-color: var(--line); }
+.secondaryButton:hover { border-color: #acd1ef; color: var(--blue); }
+.sectionHeading { margin-bottom: 34px; }
+.sectionHeading h2 { margin: 12px 0 8px; font-size: clamp(2rem,3.3vw,3rem); line-height: 1.1; letter-spacing: -.045em; }
+.sectionHeading p { max-width: 670px; margin: 0; color: var(--text); }
+.splitHeading { display: flex; align-items: end; justify-content: space-between; gap: 50px; }
+.splitHeading h2 { margin-bottom: 0; }
+.splitHeading > p { max-width: 460px; }
+@media (max-width: 620px) {
+  .shell { width: min(calc(100% - 28px), var(--shell)); }
+  .sectionHeading { margin-bottom: 26px; }
+  .sectionHeading h2 { font-size: 2rem; }
+  .splitHeading { display: block; }
+  .splitHeading > p { margin-top: 13px; }
+}

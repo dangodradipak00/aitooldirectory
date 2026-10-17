@@ -1,0 +1,3 @@
+.notFound { min-height: 65vh; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
+.notFound h1 { margin: 14px 0; font-size: clamp(2.6rem,6vw,5rem); letter-spacing: -.06em; line-height: 1; }
+.notFound p { max-width: 570px; margin: 0 0 28px; color: var(--text); }

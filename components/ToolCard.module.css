@@ -1,0 +1,27 @@
+.toolCard { min-width: 0; display: flex; flex-direction: column; padding: 20px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: 0 3px 12px rgba(20,33,61,.045); transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease; }
+.toolCard:hover { border-color: #c1d8eb; box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.toolCardTop { display: flex; align-items: center; gap: 12px; }
+.toolLogo { width: 46px; height: 46px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 12px; background: var(--sky); color: var(--blue); font-size: .82rem; font-weight: 900; }
+.accentViolet { color: var(--violet); background: #f0edff; }
+.accentOrange { color: var(--orange); background: #fff1e7; }
+.accentBlue { color: var(--blue); background: var(--sky); }
+.toolTitleWrap { min-width: 0; }
+.toolTitleWrap h3 { margin: 0 0 1px; overflow: hidden; font-size: 1rem; line-height: 1.3; text-overflow: ellipsis; white-space: nowrap; }
+.toolTitleWrap h3 a:hover { color: var(--blue); }
+.toolCategory { color: var(--muted); font-size: .65rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.cardSave { width: 42px; height: 42px; display: grid; place-items: center; margin-left: auto; flex: 0 0 auto; border: 1px solid var(--line); border-radius: 10px; color: #a9b6c7; background: var(--surface); }
+.cardSave:hover, .saved { color: var(--pink); border-color: #f7b7d0; background: #fff4f8; }
+.toolSummary { flex: 1; margin: 17px 0 20px; color: var(--text); font-size: .84rem; line-height: 1.65; }
+.toolCardBottom { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 14px; border-top: 1px solid #edf1f5; }
+.priceTag { display: inline-flex; align-items: center; min-height: 25px; padding: 2px 8px; border-radius: 6px; font-size: .68rem; font-weight: 850; }
+.pricePaid { color: #a53142; background: #ffecef; }
+.priceFree { color: var(--green); background: #eaf8f0; }
+.cardLinks { display: flex; align-items: center; gap: 7px; }
+.detailsLink, .visitLink { min-height: 34px; display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 0 10px; border-radius: 8px; font-size: .76rem; font-weight: 800; }
+.detailsLink { border: 1px solid var(--line); }
+.detailsLink:hover { border-color: #a9cbe7; color: var(--blue); }
+.visitLink { color: white; background: var(--blue); }
+.visitLink:hover { background: var(--blue-dark); }
+.visitLink svg { width: 13px; }
+@media (max-width: 620px) { .toolCard { padding: 18px; } .toolCardBottom { align-items: flex-end; } }
+@media (max-width: 380px) { .toolTitleWrap h3 { max-width: 170px; } .cardLinks { gap: 5px; } .detailsLink, .visitLink { padding-inline: 9px; } }
