@@ -9,7 +9,6 @@ export default function HomepageCategories({ categories }) {
       <div className={ui.shell}>
         <div className={styles.divider}><span>Popular AI categories</span></div>
         <div className={`${ui.sectionHeading} ${styles.heading}`}>
-          <span className={ui.eyebrow}>Software directory</span>
           <h2 id="homepage-categories-title">Find the right category for the job</h2>
           <p>Start with a category, review up to ten matching tools and open the full category when you need more.</p>
         </div>

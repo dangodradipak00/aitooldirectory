@@ -55,7 +55,7 @@ export default async function ToolPage({ params }) {
   const vendorLinkRel = getVendorLinkRel(tool);
   const toolPageUrl = absoluteUrl(`/tools/${tool.slug}/`);
   const toolSubcategories = tool.subcategoryIds.map(getSubcategory).filter(Boolean);
-  const otherCategories = mainCategories.filter((item) => item.id !== category.id).slice(0, 8);
+  const otherCategories = mainCategories.filter((item) => item.id !== category.id);
   const details = tool.details;
   const relatedTools = getToolsByCategory(tool.primaryCategoryId)
     .filter((candidate) => candidate.slug !== tool.slug)
@@ -163,7 +163,6 @@ export default async function ToolPage({ params }) {
             <article className={styles.detailMain}>
               {details ? (
                 <div className={styles.contentArticle}>
-                  <div className={styles.editorialMeta}><span>Editorial overview</span><p>Researched by <Link href="/authors/editorial-team/">{editorialTeamName}</Link> · Information checked {details.pricingVerified}</p></div>
                   <section id="what-is" className={styles.contentSection}><h2>What is {tool.name}?</h2><p>{details.introduction}</p></section>
                   <section id="who-should-use" className={styles.contentSection}><h2>Who should use {tool.name}?</h2><p>{details.audience}</p></section>
                   <section id="features" className={styles.contentSection}>
@@ -177,13 +176,11 @@ export default async function ToolPage({ params }) {
                     <div className={styles.proConGrid}><div className={styles.proBox}><h3>Pros</h3><ul>{details.pros.map((item) => <li key={item}>{item}</li>)}</ul></div><div className={styles.conBox}><h3>Cons</h3><ul>{details.cons.map((item) => <li key={item}>{item}</li>)}</ul></div></div>
                   </section>
                   <section id="use-cases" className={styles.contentSection}><h2>Popular {tool.name} use cases</h2><div className={styles.useCaseGrid}>{details.useCases.map((item) => <div key={item.name}><h3>{item.name}</h3><p>{item.description}</p></div>)}</div></section>
-                  <section id="editorial-summary" className={styles.contentSection}><h2>Editorial summary</h2><p>{details.editorialSummary}</p></section>
-                  <section id="sources" className={styles.contentSection}><h2>Sources and editorial process</h2><p>This overview uses information from the <a href={tool.website} target="_blank" rel={vendorLinkRel}>official {tool.name} website</a> and publicly available product materials. It is not presented as hands-on testing unless the page explicitly describes that testing.</p><p>Read our <Link href="/editorial-policy/">editorial policy</Link>{tool.sponsored ? <> and <Link href="/advertising-disclosure/">advertising disclosure</Link></> : null}.</p></section>
+                  <section id="conclusion" className={styles.contentSection}><h2>Conclusion</h2><p>{details.editorialSummary}</p></section>
                   <section id="faqs" className={styles.contentSection}><h2>Frequently asked questions</h2><div className={styles.faqList}>{details.faqs.map((faq) => <div key={faq.question}><h3>{faq.question}</h3><p>{faq.answer}</p></div>)}</div></section>
                 </div>
               ) : (
                 <div className={styles.contentArticle}>
-                  <div className={styles.editorialMeta}><span>Editorial overview</span><p>Prepared by <Link href="/authors/editorial-team/">{editorialTeamName}</Link> from public vendor information.</p></div>
                   <section className={styles.contentSection}><h2>Who it may suit</h2><p>{tool.bestFor}</p></section>
                   <section className={styles.contentSection}><h2>What to review</h2><ul className={styles.checkList}>{tool.highlights.map((item) => <li key={item}>{item}</li>)}</ul></section>
                   <section className={styles.contentSection}><h2>Editorial note</h2><p>This overview is for initial software discovery. Features and pricing can change; confirm current details directly with the vendor.</p></section>

@@ -2,7 +2,7 @@
 .divider { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 14px; max-width: 900px; margin: 0 auto 36px; color: var(--muted); font-size: .7rem; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
 .divider::before, .divider::after { content: ""; height: 1px; background: var(--line); }
 .heading { text-align: center; }
-.heading p { margin-inline: auto; }
+.heading.heading > p { width: min(100%,700px); margin: 0 auto; text-align: center; }
 .grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 16px; }
 .card { --accent: var(--blue); min-width: 0; min-height: 410px; display: flex; flex-direction: column; padding: 10px; border: 1px solid var(--line); border-radius: 15px; background: var(--surface); box-shadow: 0 8px 24px rgba(38,78,119,.1); }
 .accentViolet { --accent: var(--violet); }

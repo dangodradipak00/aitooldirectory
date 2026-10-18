@@ -22,6 +22,10 @@ export default function Footer() {
             <span>AgencyTool<span>Guide</span></span>
           </Link>
           <p>Practical software discovery for small SEO and digital marketing agencies.</p>
+          <div className={styles.footerContact}>
+            <span>Questions or listing enquiries?</span>
+            <a href="mailto:hello@agencytoolguide.com">hello@agencytoolguide.com</a>
+          </div>
         </div>
         <div>
           <h2>Categories</h2>
@@ -58,7 +62,6 @@ export default function Footer() {
         </div>
       </div>
       <div className={`${styles.shell} ${styles.footerBottom}`}>
-        <p>Independent software directory. Confirm current features and pricing on each vendor’s official website.</p>
         <p>© {new Date().getFullYear()} AgencyToolGuide</p>
       </div>
       <div className={`${styles.shell} ${styles.footerWordmark}`} aria-hidden="true">AgencyToolGuide</div>

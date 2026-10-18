@@ -59,15 +59,14 @@ export const mainCategories = [
   category({ id: 'e-commerce', name: 'E-commerce', description: 'Create product content and operate online stores and merchandising.', subcategories: [['product-descriptions', 'Product Descriptions'], ['product-photography', 'Product Photography'], ['shopping-assistants', 'Shopping Assistants'], ['store-management', 'Store Management'], ['pricing-merchandising', 'Pricing & Merchandising']] }),
   category({ id: 'education-learning', name: 'Education & Learning', description: 'Support teaching, studying, training and course creation.', subcategories: [['ai-tutors', 'AI Tutors'], ['language-learning', 'Language Learning'], ['exam-preparation', 'Exam Preparation'], ['course-creation', 'Course Creation'], ['teacher-tools', 'Teacher Tools'], ['ai-learning-resources', 'AI Learning Resources']] }),
   category({ id: '3d-gaming', name: '3D & Gaming', description: 'Create 3D assets, games, textures and interactive gaming experiences.', subcategories: [['3d-model-generation', '3D Model Generation'], ['3d-textures-animation', '3D Textures & Animation'], ['game-development', 'Game Development'], ['game-assets', 'Game Assets'], ['gaming-assistants', 'Gaming Assistants']] }),
-  category({ id: 'nsfw-ai', name: 'NSFW AI', description: 'Discover age-restricted AI tools for adult-oriented creative and conversational experiences.', subcategories: [['nsfw-image-generation', 'NSFW Image Generation'], ['nsfw-video-generation', 'NSFW Video Generation'], ['adult-ai-chatbots', 'Adult AI Chatbots'], ['ai-companions', 'AI Companions'], ['adult-content-creation', 'Adult Content Creation']] }),
   category({ id: 'lifestyle-entertainment', name: 'Lifestyle & Entertainment', description: 'Plan everyday activities, travel, food, fitness and entertainment.', subcategories: [['travel-planning', 'Travel Planning'], ['fitness-workout-planning', 'Fitness & Workout Planning'], ['meal-planning-recipes', 'Meal Planning & Recipes'], ['gift-ideas', 'Gift Ideas'], ['fun-entertainment', 'Fun & Entertainment']] }),
   category({ id: 'healthcare-wellness', name: 'Healthcare & Wellness', description: 'Support clinical, administrative, research and personal wellness workflows.', subcategories: [['clinical-documentation', 'Clinical Documentation'], ['medical-research-tools', 'Medical Research Tools'], ['healthcare-administration', 'Healthcare Administration'], ['patient-communication', 'Patient Communication'], ['wellness-self-care', 'Wellness & Self-Care']] })
 ];
 
 export const subcategories = mainCategories.flatMap((item) => item.subcategories);
 
-if (mainCategories.length !== 29 || new Set(mainCategories.map((item) => item.id)).size !== mainCategories.length) {
-  throw new Error('The category taxonomy must contain 29 uniquely identified main categories.');
+if (mainCategories.length !== 28 || new Set(mainCategories.map((item) => item.id)).size !== mainCategories.length) {
+  throw new Error('The category taxonomy must contain 28 uniquely identified main categories.');
 }
 if (new Set(subcategories.map((item) => item.id)).size !== subcategories.length) {
   throw new Error('Every subcategory must have a unique identifier.');
