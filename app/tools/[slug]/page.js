@@ -6,7 +6,7 @@ import JsonLd from '../../../components/JsonLd';
 import { ExternalIcon, VerifiedIcon } from '../../../components/Icons';
 import EmbedBadge from './EmbedBadge';
 import ShareButton from './ShareButton';
-import { getCategory, getSubcategory } from '../../../data/categories';
+import { getCategory, getSubcategory, mainCategories } from '../../../data/categories';
 import { getTool, getToolsByCategory, publishedTools } from '../../../data/tools';
 import { getVendorLinkRel } from '../../../lib/link-utils';
 import { absoluteUrl, editorialTeamName } from '../../../lib/site';
@@ -55,6 +55,7 @@ export default async function ToolPage({ params }) {
   const vendorLinkRel = getVendorLinkRel(tool);
   const toolPageUrl = absoluteUrl(`/tools/${tool.slug}/`);
   const toolSubcategories = tool.subcategoryIds.map(getSubcategory).filter(Boolean);
+  const otherCategories = mainCategories.filter((item) => item.id !== category.id).slice(0, 8);
   const details = tool.details;
   const relatedTools = getToolsByCategory(tool.primaryCategoryId)
     .filter((candidate) => candidate.slug !== tool.slug)
@@ -189,6 +190,28 @@ export default async function ToolPage({ params }) {
                 </div>
               )}
             </article>
+            <aside className={styles.adSidebar} aria-label="Tool discovery sidebar">
+              <article className={`${styles.adCard} ${styles.adCardNeutral}`}>
+                <span className={styles.adLabel}>Ad</span>
+                <div className={styles.adCardHeader}>
+                  <span className={styles.adBrandMark} aria-hidden="true">A</span>
+                  <h2>Sponsor your tool</h2>
+                </div>
+                <p>Put your tool in front of relevant buyers, gain more referral traffic and grow brand visibility.</p>
+                <Link className={styles.adButton} href="/submit/">Sponsor your tool <span aria-hidden="true">&rarr;</span></Link>
+              </article>
+
+              <nav className={styles.otherCategoriesCard} aria-labelledby="other-categories-title">
+                <span className={styles.categoriesEyebrow}>Explore the directory</span>
+                <h2 id="other-categories-title">Other categories</h2>
+                <ul>
+                  {otherCategories.map((item) => (
+                    <li key={item.id}><Link href={`/categories/${item.slug}/`}>{item.name}<span aria-hidden="true">&rarr;</span></Link></li>
+                  ))}
+                </ul>
+                <Link className={styles.allCategoriesLink} href="/categories/">View all categories <span aria-hidden="true">&rarr;</span></Link>
+              </nav>
+            </aside>
           </div>
         </section>
 

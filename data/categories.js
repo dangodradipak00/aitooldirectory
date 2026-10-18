@@ -9,6 +9,7 @@ const subcategory = (parentCategoryId, slug, name, searchSynonyms = []) => ({
 
 const category = ({
   id,
+  slug,
   name,
   description,
   subcategories,
@@ -18,7 +19,7 @@ const category = ({
   accent = 'blue'
 }) => ({
   id,
-  slug: id,
+  slug: slug || id,
   name,
   description,
   searchSynonyms,
@@ -36,8 +37,8 @@ export const mainCategories = [
   category({ id: 'seo-marketing', name: 'SEO & Marketing', description: 'Research, optimize, measure and grow organic and paid marketing performance.', publicVisible: true, selectedOnHomepage: true, accent: 'violet', subcategories: [['keyword-research', 'Keyword Research'], ['content-optimization', 'Content Optimization'], ['seo-audits', 'SEO Audits'], ['rank-tracking', 'Rank Tracking'], ['advertising-campaigns', 'Advertising & Campaigns'], ['marketing-analytics', 'Marketing Analytics']] }),
   category({ id: 'social-media', name: 'Social Media', description: 'Plan, publish and measure content across social channels.', subcategories: [['posts-captions', 'Posts & Captions'], ['social-scheduling', 'Social Scheduling'], ['social-analytics', 'Social Analytics'], ['influencer-tools', 'Influencer Tools'], ['virtual-influencers', 'Virtual Influencers']] }),
   category({ id: 'email-outreach', name: 'Email & Outreach', description: 'Write, manage and automate email communication and outreach.', subcategories: [['email-writing', 'Email Writing'], ['inbox-management', 'Inbox Management'], ['cold-outreach', 'Cold Outreach'], ['email-marketing', 'Email Marketing']] }),
-  category({ id: 'ai-detection-content-checking', name: 'AI Detection & Content Checking', description: 'Review content for originality, reliability and AI-generation signals.', subcategories: [['ai-content-detection', 'AI Content Detection'], ['content-humanizing', 'Content Humanizing'], ['plagiarism-checking', 'Plagiarism Checking'], ['fact-checking', 'Fact Checking']] }),
-  category({ id: 'image-generation-art', name: 'Image Generation & Art', description: 'Generate original images, illustrations and visual variations.', subcategories: [['text-to-image', 'Text to Image'], ['ai-art-illustration', 'AI Art & Illustration'], ['anime-generation', 'Anime Generation'], ['image-variations', 'Image Variations']] }),
+  category({ id: 'ai-detection-content-checking', slug: 'ai-detection-content', name: 'AI Detection & Content', description: 'Review content for originality, reliability and AI-generation signals.', subcategories: [['ai-content-detection', 'AI Content Detection'], ['content-humanizing', 'Content Humanizing'], ['plagiarism-checking', 'Plagiarism Checking'], ['fact-checking', 'Fact Checking']] }),
+  category({ id: 'image-generation-art', slug: 'image-generation', name: 'Image Generation', description: 'Generate original images, illustrations and visual variations.', subcategories: [['text-to-image', 'Text to Image'], ['ai-art-illustration', 'AI Art & Illustration'], ['anime-generation', 'Anime Generation'], ['image-variations', 'Image Variations']] }),
   category({ id: 'design-branding', name: 'Design & Branding', description: 'Create brand identities, interfaces and visual design assets.', subcategories: [['logo-design', 'Logo Design'], ['graphic-design', 'Graphic Design'], ['ui-ux-design', 'UI & UX Design'], ['brand-assets', 'Brand Assets'], ['interior-architectural-design', 'Interior & Architectural Design'], ['real-estate-virtual-staging', 'Real Estate & Virtual Staging'], ['fashion-styling', 'Fashion & Styling']] }),
   category({ id: 'photo-editing-avatars', name: 'Photo Editing & Avatars', description: 'Enhance photographs and create portraits, avatars and visual identities.', subcategories: [['photo-enhancement', 'Photo Enhancement'], ['background-removal', 'Background Removal'], ['object-removal', 'Object Removal'], ['image-upscaling', 'Image Upscaling'], ['headshots', 'Headshots'], ['avatars', 'Avatars'], ['face-editing', 'Face Editing'], ['virtual-try-on', 'Virtual Try-On']] }),
   category({ id: 'video-animation', name: 'Video & Animation', description: 'Generate, edit and enhance videos, animations and presenter content.', subcategories: [['video-generation', 'Video Generation'], ['video-editing', 'Video Editing'], ['animation', 'Animation'], ['ai-presenters', 'AI Presenters'], ['personalized-videos', 'Personalized Videos'], ['captions-subtitles', 'Captions & Subtitles']] }),
@@ -58,14 +59,15 @@ export const mainCategories = [
   category({ id: 'e-commerce', name: 'E-commerce', description: 'Create product content and operate online stores and merchandising.', subcategories: [['product-descriptions', 'Product Descriptions'], ['product-photography', 'Product Photography'], ['shopping-assistants', 'Shopping Assistants'], ['store-management', 'Store Management'], ['pricing-merchandising', 'Pricing & Merchandising']] }),
   category({ id: 'education-learning', name: 'Education & Learning', description: 'Support teaching, studying, training and course creation.', subcategories: [['ai-tutors', 'AI Tutors'], ['language-learning', 'Language Learning'], ['exam-preparation', 'Exam Preparation'], ['course-creation', 'Course Creation'], ['teacher-tools', 'Teacher Tools'], ['ai-learning-resources', 'AI Learning Resources']] }),
   category({ id: '3d-gaming', name: '3D & Gaming', description: 'Create 3D assets, games, textures and interactive gaming experiences.', subcategories: [['3d-model-generation', '3D Model Generation'], ['3d-textures-animation', '3D Textures & Animation'], ['game-development', 'Game Development'], ['game-assets', 'Game Assets'], ['gaming-assistants', 'Gaming Assistants']] }),
+  category({ id: 'nsfw-ai', name: 'NSFW AI', description: 'Discover age-restricted AI tools for adult-oriented creative and conversational experiences.', subcategories: [['nsfw-image-generation', 'NSFW Image Generation'], ['nsfw-video-generation', 'NSFW Video Generation'], ['adult-ai-chatbots', 'Adult AI Chatbots'], ['ai-companions', 'AI Companions'], ['adult-content-creation', 'Adult Content Creation']] }),
   category({ id: 'lifestyle-entertainment', name: 'Lifestyle & Entertainment', description: 'Plan everyday activities, travel, food, fitness and entertainment.', subcategories: [['travel-planning', 'Travel Planning'], ['fitness-workout-planning', 'Fitness & Workout Planning'], ['meal-planning-recipes', 'Meal Planning & Recipes'], ['gift-ideas', 'Gift Ideas'], ['fun-entertainment', 'Fun & Entertainment']] }),
   category({ id: 'healthcare-wellness', name: 'Healthcare & Wellness', description: 'Support clinical, administrative, research and personal wellness workflows.', subcategories: [['clinical-documentation', 'Clinical Documentation'], ['medical-research-tools', 'Medical Research Tools'], ['healthcare-administration', 'Healthcare Administration'], ['patient-communication', 'Patient Communication'], ['wellness-self-care', 'Wellness & Self-Care']] })
 ];
 
 export const subcategories = mainCategories.flatMap((item) => item.subcategories);
 
-if (mainCategories.length !== 28 || new Set(mainCategories.map((item) => item.id)).size !== mainCategories.length) {
-  throw new Error('The category taxonomy must contain 28 uniquely identified main categories.');
+if (mainCategories.length !== 29 || new Set(mainCategories.map((item) => item.id)).size !== mainCategories.length) {
+  throw new Error('The category taxonomy must contain 29 uniquely identified main categories.');
 }
 if (new Set(subcategories.map((item) => item.id)).size !== subcategories.length) {
   throw new Error('Every subcategory must have a unique identifier.');
@@ -74,7 +76,9 @@ if (new Set(subcategories.map((item) => item.id)).size !== subcategories.length)
 export const categoryAliases = {
   'client-reporting': 'data-analytics',
   'seo-audits-rank-tracking': 'seo-marketing',
-  'call-tracking-attribution': 'sales-customer-support'
+  'call-tracking-attribution': 'sales-customer-support',
+  'image-generation-art': 'image-generation',
+  'ai-detection-content-checking': 'ai-detection-content'
 };
 
 export const homepageCategoryIds = [
