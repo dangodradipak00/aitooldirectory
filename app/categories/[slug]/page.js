@@ -19,11 +19,12 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const { category, isLegacy } = resolveCategorySlug(slug);
   if (!category) return {};
-  const isEmpty = getToolsByCategory(category.id).length === 0;
   return {
     title: `${category.name} AI Tools`,
     description: `${category.description} Compare tools, pricing and workflow fit.`,
-    ...(isLegacy || isEmpty ? { robots: { index: false, follow: true } } : {})
+    alternates: { canonical: `/categories/${category.slug}/` },
+    openGraph: { title: `${category.name} AI Tools`, description: `${category.description} Compare tools, pricing and workflow fit.`, url: `/categories/${category.slug}/` },
+    ...(isLegacy ? { robots: { index: false, follow: true } } : {})
   };
 }
 

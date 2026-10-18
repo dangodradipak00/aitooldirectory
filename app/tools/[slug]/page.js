@@ -2,12 +2,31 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
-import ToolCard from '../../../components/ToolCard';
-import { ArrowIcon, ExternalIcon } from '../../../components/Icons';
-import { getCategory } from '../../../data/categories';
-import { getTool, getToolCategories, getToolsByCategory, publishedTools } from '../../../data/tools';
+import JsonLd from '../../../components/JsonLd';
+import { ExternalIcon, VerifiedIcon } from '../../../components/Icons';
+import EmbedBadge from './EmbedBadge';
+import ShareButton from './ShareButton';
+import { getCategory, getSubcategory } from '../../../data/categories';
+import { getTool, getToolsByCategory, publishedTools } from '../../../data/tools';
+import { getVendorLinkRel } from '../../../lib/link-utils';
+import { absoluteUrl, editorialTeamName } from '../../../lib/site';
 import styles from './page.module.css';
 import ui from '../../../styles/ui.module.css';
+
+function SocialIcon({ network }) {
+  if (network === 'x') return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 1.2h3.7l-8.1 9.2L24 22.8h-7.4l-5.8-7.6-6.6 7.6H.5l8.6-9.8L0 1.2h7.6l5.2 6.9 6.1-6.9Zm-1.3 19.4h2L6.5 3.3H4.3l13.3 17.3Z"/></svg>;
+  if (network === 'facebook') return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.8 22v-9h3l.5-3.5h-3.5V7.3c0-1 .3-1.7 1.8-1.7h1.9V2.5c-.3 0-1.5-.1-2.8-.1-2.8 0-4.7 1.7-4.7 4.8v2.3H7V13h3v9h3.8Z"/></svg>;
+  if (network === 'linkedin') return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.3 7.7A2.2 2.2 0 1 0 5.3 3.3a2.2 2.2 0 0 0 0 4.4ZM3.5 9.2h3.6V21H3.5V9.2ZM9.3 9.2h3.5v1.6h.1c.5-.9 1.7-2 3.5-2 3.7 0 4.4 2.5 4.4 5.7V21h-3.6v-5.8c0-1.4 0-3.2-1.9-3.2s-2.3 1.5-2.3 3.1V21H9.3V9.2Z"/></svg>;
+  if (network === 'youtube') return <svg className={styles.youtubeLogo} viewBox="0 0 24 18" aria-hidden="true"><rect className={styles.youtubeBody} x="0" y="0" width="24" height="18" rx="5"/><path className={styles.youtubePlay} d="m9.5 5 7 4-7 4V5Z"/></svg>;
+  return <svg className={styles.socialStrokeIcon} viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4.5 7 7.5 6 7.5-6"/></svg>;
+}
+
+function getPricingType(pricing) {
+  const normalizedPricing = pricing.trim().toLowerCase();
+  if (normalizedPricing === 'free') return 'Free';
+  if (normalizedPricing.includes('free')) return 'Freemium';
+  return 'Premium';
+}
 
 export const dynamicParams = false;
 
@@ -20,8 +39,10 @@ export async function generateMetadata({ params }) {
   const tool = getTool(slug);
   if (!tool) return {};
   return {
-    title: `${tool.name} — Overview for Agencies`,
-    description: `${tool.summary} Review the fit, pricing model and official product website.`
+    title: `${tool.name}: Features, Pricing, Pros & Cons`,
+    description: `Explore ${tool.name} features, pricing, pros, cons and key use cases to understand whether it fits your business, team or workflow.`,
+    alternates: { canonical: `/tools/${tool.slug}/` },
+    openGraph: { title: `${tool.name}: Features, Pricing, Pros & Cons`, description: tool.summary, url: `/tools/${tool.slug}/`, type: 'article' }
   };
 }
 
@@ -30,46 +51,185 @@ export default async function ToolPage({ params }) {
   const tool = getTool(slug);
   if (!tool) notFound();
   const category = getCategory(tool.primaryCategoryId);
-  const toolCategories = getToolCategories(tool);
-  const relatedTools = getToolsByCategory(tool.primaryCategoryId).filter((item) => item.slug !== tool.slug);
+  const pricingType = getPricingType(tool.pricing);
+  const vendorLinkRel = getVendorLinkRel(tool);
+  const toolPageUrl = absoluteUrl(`/tools/${tool.slug}/`);
+  const toolSubcategories = tool.subcategoryIds.map(getSubcategory).filter(Boolean);
+  const details = tool.details;
+  const relatedTools = getToolsByCategory(tool.primaryCategoryId)
+    .filter((candidate) => candidate.slug !== tool.slug)
+    .map((candidate) => ({
+      ...candidate,
+      sharedSubcategories: candidate.subcategoryIds
+        .filter((subcategoryId) => tool.subcategoryIds.includes(subcategoryId))
+        .map(getSubcategory)
+        .filter(Boolean)
+    }))
+    .filter((candidate) => candidate.sharedSubcategories.length > 0)
+    .sort((a, b) => b.sharedSubcategories.length - a.sharedSubcategories.length || a.name.localeCompare(b.name))
+    .slice(0, 4);
+  const toolSchema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebPage', '@id': `${toolPageUrl}#webpage`, url: toolPageUrl,
+        name: `${tool.name}: Features, Pricing, Pros & Cons`, description: tool.summary,
+        author: { '@type': 'Organization', name: editorialTeamName, url: absoluteUrl('/authors/editorial-team/') },
+        about: { '@type': 'SoftwareApplication', name: tool.name, description: tool.summary, applicationCategory: category.name, operatingSystem: 'Web', sameAs: tool.website }
+      },
+      {
+        '@type': 'BreadcrumbList', itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
+          { '@type': 'ListItem', position: 2, name: category.name, item: absoluteUrl(`/categories/${category.slug}/`) },
+          { '@type': 'ListItem', position: 3, name: tool.name, item: toolPageUrl }
+        ]
+      }
+    ]
+  };
 
   return (
     <>
+      <JsonLd data={toolSchema} />
       <Header />
-      <main id="main-content">
+      <main id="main-content" className={styles.page}>
         <div className={`${ui.shell} ${styles.breadcrumb}`}><Link href="/">Home</Link><span>/</span><Link href={`/categories/${category.slug}/`}>{category.name}</Link><span>/</span><span>{tool.name}</span></div>
+
         <section className={styles.detailHero}>
-          <div className={`${ui.shell} ${styles.detailHeroInner}`}>
-            <div className={`${styles.detailLogo} ${styles[`accent${category.accent[0].toUpperCase()}${category.accent.slice(1)}`]}`}>{tool.initials}</div>
-            <div className={styles.detailTitle}>
-              <span className={ui.eyebrow}>{category.name}</span>
-              <h1>{tool.name}</h1>
-              <p>{tool.summary}</p>
+          <div className={`${ui.shell} ${styles.profileCard}`}>
+            <div className={styles.profileHeader}>
+              <div className={styles.profileIdentity}>
+                <div className={`${styles.detailLogo} ${styles[`accent${category.accent[0].toUpperCase()}${category.accent.slice(1)}`]}`}>{tool.initials}</div>
+                <div className={styles.detailTitle}>
+                  <h1>{tool.name} <span className={styles.verifiedMark} title="Information checked by the AgencyToolGuide editorial team" aria-label="Editorially checked profile"><VerifiedIcon /></span></h1>
+                  <div className={styles.titleBadges}>
+                    <span className={`${styles.pricingType} ${styles[`pricing${pricingType}`]}`}>{pricingType}</span>
+                    {tool.sponsored && <span className={styles.sponsoredDisclosure}>Sponsored listing</span>}
+                  </div>
+                </div>
+              </div>
+              <div className={styles.profileActions}>
+                <ShareButton title={`Explore ${tool.name} on AgencyToolGuide`} />
+                <a className={styles.siteButton} href={tool.website} target="_blank" rel={vendorLinkRel}><ExternalIcon /> Visit this site</a>
+              </div>
             </div>
-            <a className={`${ui.primaryButton} ${styles.detailVisit}`} href={tool.website} target="_blank" rel="noopener noreferrer">Visit official website <ExternalIcon /></a>
+
+            <div className={styles.profileDivider} />
+
+            <div className={styles.profileBody}>
+              <div className={styles.mediaColumn}>
+                <a className={styles.heroMedia} href={tool.website} target="_blank" rel={vendorLinkRel} aria-label={`Visit the official ${tool.name} website`}>
+                  {details?.heroImage ? (
+                    <img className={styles.heroImage} src={details.heroImage} alt={details.heroImageAlt || `${tool.name} product preview`} />
+                  ) : (
+                    <>
+                      <span className={styles.mediaEyebrow}>Featured tool</span>
+                      <span className={styles.mediaMark}>{tool.initials}</span>
+                      <strong>{tool.name}</strong>
+                      <p>{tool.highlights.join(' • ')}</p>
+                    </>
+                  )}
+                  <span className={styles.mediaOverlay}>Visit Website <ExternalIcon /></span>
+                </a>
+
+                <div className={styles.tagList} aria-label={`${tool.name} categories and subcategories`}>
+                  <span className={styles.utilityTag}>Website</span>
+                  <span className={styles.utilityTag}>{tool.pricing}</span>
+                  <span className={styles.categoryTag}>{category.name}</span>
+                  {toolSubcategories.map((subcategory) => <span className={styles.subcategoryTag} key={subcategory.id}>{subcategory.name}</span>)}
+                </div>
+              </div>
+
+              <div className={styles.profileSummary}>
+                <div className={styles.summaryQuote}><p>{details?.introduction || tool.summary}</p></div>
+                <p className={styles.bestFor}><strong>Best for:</strong> {tool.bestFor}</p>
+                {tool.socialLinks?.length > 0 && (
+                  <div className={styles.socialRow}>
+                    <span>Social &amp; email</span>
+                    <div className={styles.socialLinks}>
+                      {tool.socialLinks.map((social) => (
+                        <a key={social.network} className={styles[`social${social.network[0].toUpperCase()}${social.network.slice(1)}`]} href={social.url} target={social.network === 'email' ? undefined : '_blank'} rel={social.network === 'email' ? undefined : vendorLinkRel} aria-label={social.label} title={social.label}><SocialIcon network={social.network} /></a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </section>
 
         <section className={styles.detailContent}>
           <div className={`${ui.shell} ${styles.detailGrid}`}>
             <article className={styles.detailMain}>
-              <div className={styles.contentBlock}><h2>Who it may suit</h2><p>{tool.bestFor}</p></div>
-              <div className={styles.contentBlock}><h2>What to review</h2><ul className={styles.checkList}>{tool.highlights.map((item) => <li key={item}>{item}</li>)}</ul></div>
-              <div className={styles.noticeBox}><strong>Editorial note</strong><p>This overview is for initial software discovery. Features and pricing can change; confirm current details directly with the vendor.</p></div>
+              {details ? (
+                <div className={styles.contentArticle}>
+                  <div className={styles.editorialMeta}><span>Editorial overview</span><p>Researched by <Link href="/authors/editorial-team/">{editorialTeamName}</Link> · Information checked {details.pricingVerified}</p></div>
+                  <section id="what-is" className={styles.contentSection}><h2>What is {tool.name}?</h2><p>{details.introduction}</p></section>
+                  <section id="who-should-use" className={styles.contentSection}><h2>Who should use {tool.name}?</h2><p>{details.audience}</p></section>
+                  <section id="features" className={styles.contentSection}>
+                    <h2>Key features of {tool.name}</h2>
+                    <div className={styles.featureList}>{details.features.map((feature) => <div key={feature.name}><h3>{feature.name}</h3><p>{feature.description}</p></div>)}</div>
+                  </section>
+                  <section id="how-it-works" className={styles.contentSection}><h2>How does {tool.name} work?</h2><ol className={styles.stepList}>{details.workflow.map((step) => <li key={step}>{step}</li>)}</ol></section>
+                  <section id="pricing" className={styles.contentSection}><h2>{tool.name} pricing and plans</h2><p>{details.pricingSummary}</p><p className={styles.verified}>Pricing information checked: {details.pricingVerified}</p></section>
+                  <section id="pros-cons" className={styles.contentSection}>
+                    <h2>{tool.name} pros and cons</h2>
+                    <div className={styles.proConGrid}><div className={styles.proBox}><h3>Pros</h3><ul>{details.pros.map((item) => <li key={item}>{item}</li>)}</ul></div><div className={styles.conBox}><h3>Cons</h3><ul>{details.cons.map((item) => <li key={item}>{item}</li>)}</ul></div></div>
+                  </section>
+                  <section id="use-cases" className={styles.contentSection}><h2>Popular {tool.name} use cases</h2><div className={styles.useCaseGrid}>{details.useCases.map((item) => <div key={item.name}><h3>{item.name}</h3><p>{item.description}</p></div>)}</div></section>
+                  <section id="editorial-summary" className={styles.contentSection}><h2>Editorial summary</h2><p>{details.editorialSummary}</p></section>
+                  <section id="sources" className={styles.contentSection}><h2>Sources and editorial process</h2><p>This overview uses information from the <a href={tool.website} target="_blank" rel={vendorLinkRel}>official {tool.name} website</a> and publicly available product materials. It is not presented as hands-on testing unless the page explicitly describes that testing.</p><p>Read our <Link href="/editorial-policy/">editorial policy</Link>{tool.sponsored ? <> and <Link href="/advertising-disclosure/">advertising disclosure</Link></> : null}.</p></section>
+                  <section id="faqs" className={styles.contentSection}><h2>Frequently asked questions</h2><div className={styles.faqList}>{details.faqs.map((faq) => <div key={faq.question}><h3>{faq.question}</h3><p>{faq.answer}</p></div>)}</div></section>
+                </div>
+              ) : (
+                <div className={styles.contentArticle}>
+                  <div className={styles.editorialMeta}><span>Editorial overview</span><p>Prepared by <Link href="/authors/editorial-team/">{editorialTeamName}</Link> from public vendor information.</p></div>
+                  <section className={styles.contentSection}><h2>Who it may suit</h2><p>{tool.bestFor}</p></section>
+                  <section className={styles.contentSection}><h2>What to review</h2><ul className={styles.checkList}>{tool.highlights.map((item) => <li key={item}>{item}</li>)}</ul></section>
+                  <section className={styles.contentSection}><h2>Editorial note</h2><p>This overview is for initial software discovery. Features and pricing can change; confirm current details directly with the vendor.</p></section>
+                </div>
+              )}
             </article>
-            <aside className={styles.detailSidebar}>
-              <h2>At a glance</h2>
-              <dl><div><dt>Categories</dt><dd>{toolCategories.map((item, index) => <span key={item.id}>{index > 0 && ', '}<Link href={`/categories/${item.slug}/`}>{item.name}</Link></span>)}</dd></div><div><dt>Pricing model</dt><dd>{tool.pricing}</dd></div><div><dt>Listing status</dt><dd>Editorial preview</dd></div></dl>
-            </aside>
           </div>
         </section>
 
-        <section className={styles.relatedSection}>
+        <section className={styles.embedSection}>
           <div className={ui.shell}>
-            <div className={`${ui.sectionHeading} ${ui.splitHeading}`}><div><span className={ui.eyebrow}>Keep comparing</span><h2>Related tools</h2></div><Link className={styles.inlineArrow} href={`/categories/${category.slug}/`}>View category <ArrowIcon /></Link></div>
-            <div className={styles.relatedGrid}>{relatedTools.map((item) => <ToolCard key={item.slug} tool={item} />)}</div>
+            <EmbedBadge toolName={tool.name} slug={tool.slug} />
           </div>
         </section>
+
+        {relatedTools.length > 0 && (
+          <section className={styles.relatedSection}>
+            <div className={ui.shell}>
+              <div className={styles.relatedHeading}>
+                <span>Keep exploring</span>
+                <h2>Related tools</h2>
+                <p>Tools in {category.name} that share one or more subcategories with {tool.name}.</p>
+              </div>
+              <div className={styles.relatedGrid}>
+                {relatedTools.map((relatedTool) => (
+                  <article className={styles.relatedCard} key={relatedTool.slug}>
+                    <div className={styles.relatedCardMeta}>
+                      <span><i aria-hidden="true" />{relatedTool.pricing}</span>
+                      <span>{relatedTool.sharedSubcategories.length} {relatedTool.sharedSubcategories.length === 1 ? 'match' : 'matches'}</span>
+                    </div>
+                    <div className={styles.relatedCardBody}>
+                      <div className={styles.relatedCardTop}>
+                      <div className={`${styles.relatedLogo} ${styles[`accent${category.accent[0].toUpperCase()}${category.accent.slice(1)}`]}`}>{relatedTool.initials}</div>
+                        <div>
+                          <h3><Link href={`/tools/${relatedTool.slug}/`}>{relatedTool.name}</Link></h3>
+                        </div>
+                      </div>
+                      <p>“{relatedTool.summary}”</p>
+                      <div className={styles.relatedTags}>{relatedTool.sharedSubcategories.map((subcategory) => <span key={subcategory.id}>{subcategory.name}</span>)}</div>
+                      <Link className={styles.relatedLink} href={`/tools/${relatedTool.slug}/`}><ExternalIcon /> View tool</Link>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
       </main>
       <Footer />
     </>

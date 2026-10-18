@@ -24,7 +24,7 @@
 .notSure small { color: var(--muted); font-weight: 500; }
 .suggestButton { justify-self: start; border: 0; padding: 0; color: var(--blue); background: none; font-weight: 800; }
 .validation { margin: 0; color: #b42b43; font-size: .82rem; font-weight: 750; }
-.form > button[disabled] { justify-self: start; opacity: .58; cursor: not-allowed; }
+.form > a { justify-self: start; }
 .previewNote { margin: -8px 0 0; color: var(--muted); font-size: .78rem; }
 .empty { color: var(--muted); }
 @media (max-width: 800px) { .secondaryGrid, .subcategoryGroup > div { grid-template-columns: repeat(2,minmax(0,1fr)); } }

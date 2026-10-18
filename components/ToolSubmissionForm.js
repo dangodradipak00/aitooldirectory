@@ -80,8 +80,8 @@ export default function ToolSubmissionForm({ categories }) {
       </div>
 
       {!notSure && !validation.valid && primaryCategoryId === '' && <p className={styles.validation}>Choose a primary category, or select “Not sure? Let us categorize it”.</p>}
-      <button className={ui.primaryButton} type="button" disabled>Submission unavailable in preview</button>
-      <p className={styles.previewNote}>This is a UI-only preview. No data will be sent or saved.</p>
+      <a className={ui.primaryButton} href="mailto:hello@agencytoolguide.com?subject=Tool%20submission%20request">Email submission request</a>
+      <p className={styles.previewNote}>This classification worksheet does not send or save data. Include your tool name, official website and preferred categories in the email request.</p>
     </form>
   );
 }

@@ -1,12 +1,21 @@
 import Link from 'next/link';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import JsonLd from '../components/JsonLd';
 import HomepageCategories from '../components/HomepageCategories';
 import { ArrowIcon, ChartIcon, PhoneIcon, ReportIcon } from '../components/Icons';
 import { getCategory, homepageCategoryIds } from '../data/categories';
 import { getToolsByCategory, publishedTools } from '../data/tools';
 import styles from './page.module.css';
 import ui from '../styles/ui.module.css';
+import { absoluteUrl, siteName } from '../lib/site';
+
+export const metadata = {
+  title: 'AI & Agency Software Directory',
+  description: 'Research AI, SEO, reporting and agency software by workflow, pricing model and practical fit.',
+  alternates: { canonical: '/' },
+  openGraph: { title: 'AgencyToolGuide Software Directory', description: 'Research software by workflow, pricing model and practical fit.', url: '/' }
+};
 
 export default function HomePage() {
   const tools = publishedTools;
@@ -14,8 +23,17 @@ export default function HomePage() {
     category: getCategory(categoryId),
     tools: getToolsByCategory(categoryId)
   }));
+  const populatedCategoryCount = homepageCategories.filter(({ tools: categoryTools }) => categoryTools.length > 0).length;
+  const homeSchema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      { '@type': 'WebSite', '@id': `${absoluteUrl('/')}#website`, url: absoluteUrl('/'), name: siteName, alternateName: 'Agency Tool Guide' },
+      { '@type': 'Organization', '@id': `${absoluteUrl('/')}#organization`, name: siteName, url: absoluteUrl('/'), email: 'hello@agencytoolguide.com' }
+    ]
+  };
   return (
     <>
+      <JsonLd data={homeSchema} />
       <Header />
       <main id="main-content">
         <section className={styles.hero}>
@@ -31,7 +49,7 @@ export default function HomePage() {
                 <Link href="/categories/" className={ui.secondaryButton}>Browse categories</Link>
               </div>
               <div className={styles.heroNote}>
-                <strong>9 tools</strong><span /> <strong>3 focused categories</strong><span /> No account required
+                <strong>{tools.length} tools</strong><span /> <strong>{populatedCategoryCount} focused categories</strong><span /> No account required
               </div>
             </div>
 

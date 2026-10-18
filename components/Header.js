@@ -55,7 +55,11 @@ export default function Header() {
   return (
     <>
       <a className={styles.skipLink} href="#main-content">Skip to main content</a>
-      <div className={styles.previewBar}>Editorial preview · Product details are being reviewed</div>
+      <Link className={styles.previewBar} href="/submit/" aria-label="Request a nine dollar editorial tool submission">
+        <span className={styles.previewLead}>Get your tool discovered</span>
+        <span className={styles.previewOffer}>Request an editorial tool profile from <strong>$9</strong> · Review required before payment</span>
+        <span className={styles.previewCta}>View process <span aria-hidden="true">→</span></span>
+      </Link>
       <header className={styles.siteHeader}>
         <div className={`${styles.shell} ${styles.headerInner}`}>
           <Link href="/" className={styles.brand} aria-label="AgencyToolGuide home">
@@ -66,7 +70,7 @@ export default function Header() {
           <nav className={styles.desktopNav} aria-label="Main navigation">
             <Link href="/#directory">Find tools</Link>
             <Link href="/categories/">Categories</Link>
-            <Link href="/#how-it-works">How we review</Link>
+            <Link href="/editorial-policy/">How we review</Link>
             <Link href="/#guides">Guides</Link>
           </nav>
 
@@ -94,7 +98,7 @@ export default function Header() {
             <Link href="/#directory" onClick={() => setMenuOpen(false)}>Find tools</Link>
             <Link href="/categories/" onClick={() => setMenuOpen(false)}>Categories</Link>
             <Link href="/submit/" onClick={() => setMenuOpen(false)}>Submit a tool</Link>
-            <Link href="/#how-it-works" onClick={() => setMenuOpen(false)}>How we review</Link>
+            <Link href="/editorial-policy/" onClick={() => setMenuOpen(false)}>How we review</Link>
             <Link href="/#guides" onClick={() => setMenuOpen(false)}>Guides</Link>
             <button type="button" onClick={showSaved}>Saved tools ({savedCount})</button>
           </nav>

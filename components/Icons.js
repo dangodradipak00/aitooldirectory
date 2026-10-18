@@ -14,6 +14,15 @@ export function ExternalIcon() {
   return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5h5v5M19 5l-9 9"/><path d="M18 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>;
 }
 
+export function VerifiedIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path className="verifiedBadgeFill" d="M12 1.8 14.4 3l2.7-.2 1.3 2.4 2.4 1.3-.2 2.7 1.2 2.8-1.2 2.8.2 2.7-2.4 1.3-1.3 2.4-2.7-.2-2.4 1.2L9.6 21l-2.7.2-1.3-2.4-2.4-1.3.2-2.7L2.2 12l1.2-2.8-.2-2.7 2.4-1.3 1.3-2.4 2.7.2L12 1.8Z"/>
+      <path className="verifiedBadgeCheck" d="m7.4 12.2 3 3 6.3-6.5"/>
+    </svg>
+  );
+}
+
 export function MenuIcon({ open }) {
   return open
     ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>

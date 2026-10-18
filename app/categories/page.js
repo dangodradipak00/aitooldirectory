@@ -9,7 +9,9 @@ import ui from '../../styles/ui.module.css';
 
 export const metadata = {
   title: 'AI Tool Categories',
-  description: 'Browse populated AI software categories and find tools by workflow.'
+  description: 'Browse populated AI software categories and find tools by workflow.',
+  alternates: { canonical: '/categories/' },
+  openGraph: { title: 'AI Tool Categories', description: 'Browse AI software categories and find tools by workflow.', url: '/categories/' }
 };
 
 export default function CategoriesPage() {

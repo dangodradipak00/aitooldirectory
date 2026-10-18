@@ -11,7 +11,7 @@ export default function NotFound() {
       <main id="main-content" className={`${styles.notFound} ${ui.shell}`}>
         <span className={ui.eyebrow}>404</span>
         <h1>This page could not be found.</h1>
-        <p>The page may have moved, or the tool is not part of the published preview.</p>
+        <p>The page may have moved, or the tool is not part of the published directory.</p>
         <Link href="/" className={ui.primaryButton}>Return to the directory</Link>
       </main>
       <Footer />

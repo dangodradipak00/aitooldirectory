@@ -4,4 +4,12 @@
 .hero p { max-width: 680px; margin: 0 auto; color: var(--text); }
 .content { padding: 60px 0 90px; background: var(--canvas); }
 .formWrap { max-width: 980px; }
+.offerNotice { display: grid; grid-template-columns: .8fr 1.2fr; gap: 18px 42px; margin-bottom: 28px; padding: 28px 30px; border: 1px solid #bedcf3; border-radius: 16px; background: var(--sky); }
+.offerNotice span { color: var(--blue); font-size: .68rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.offerNotice h2 { margin: 7px 0 0; font-size: 1.35rem; letter-spacing: -.03em; }
+.offerNotice ul { margin: 0; padding-left: 19px; }
+.offerNotice li { color: var(--text); font-size: .8rem; line-height: 1.65; }
+.offerNotice p { grid-column: 1/-1; margin: 0; padding-top: 17px; border-top: 1px solid #c8dfef; color: var(--text); font-size: .78rem; line-height: 1.65; }
+.offerNotice a { color: var(--blue); font-weight: 750; text-decoration: underline; text-underline-offset: 3px; }
 @media (max-width: 620px) { .hero { padding: 54px 0 40px; } .content { padding: 38px 0 65px; } }
+@media (max-width: 700px) { .offerNotice { grid-template-columns: 1fr; padding: 23px 20px; } .offerNotice p { grid-column: auto; } }
