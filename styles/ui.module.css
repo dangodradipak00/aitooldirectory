@@ -19,3 +19,9 @@
   .splitHeading { display: block; }
   .splitHeading > p { margin-top: 13px; }
 }
+@media (max-width: 420px) {
+  .shell { width: min(calc(100% - 24px), var(--shell)); }
+  .eyebrow { max-width: 100%; justify-content: center; font-size: .66rem; letter-spacing: .075em; }
+  .primaryButton, .secondaryButton { min-height: 48px; padding-inline: 16px; font-size: .86rem; }
+  .sectionHeading h2 { font-size: 1.8rem; }
+}

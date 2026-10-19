@@ -1,3 +1,4 @@
+import './globals.css';
 import styles from './layout.module.css';
 import { siteName, siteUrl } from '../lib/site';
 

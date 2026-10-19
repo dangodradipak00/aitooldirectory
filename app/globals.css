@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--paper);
+  --color-foreground: var(--ink);
+  --color-border: var(--line);
+}

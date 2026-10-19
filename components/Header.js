@@ -2,13 +2,27 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { MenuIcon } from './Icons';
 import styles from './Header.module.css';
 
-export default function Header() {
+export default function Header({ heroContrast = false }) {
   const [darkMode, setDarkMode] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     setDarkMode(document.body.dataset.theme === 'dark');
+    const handleScroll = () => setScrolled(window.scrollY > 24);
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') setMenuOpen(false);
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   const toggleTheme = () => {
@@ -21,7 +35,7 @@ export default function Header() {
   return (
     <>
       <a className={styles.skipLink} href="#main-content">Skip to main content</a>
-      <header className={styles.siteHeader}>
+      <header className={`${styles.siteHeader} ${heroContrast && darkMode ? styles.heroContrast : ''} ${scrolled ? styles.scrolled : ''}`}>
         <div className={`${styles.shell} ${styles.headerInner}`}>
           <Link href="/" className={styles.brand} aria-label="AgencyToolGuide home">
             <span className={styles.brandMark}>A</span>
@@ -29,7 +43,10 @@ export default function Header() {
           </Link>
 
           <nav className={styles.desktopNav} aria-label="Main navigation">
+            <Link href="/">Browse tools</Link>
             <Link href="/categories/">Categories</Link>
+            <Link href="/about/">About</Link>
+            <Link href="/contact/">Contact</Link>
           </nav>
 
           <div className={styles.headerActions}>
@@ -41,8 +58,20 @@ export default function Header() {
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8 8 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z" /></svg>
               )}
             </button>
+            <button className={styles.menuButton} type="button" onClick={() => setMenuOpen((open) => !open)} aria-expanded={menuOpen} aria-controls="mobile-navigation" aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}>
+              <MenuIcon open={menuOpen} />
+            </button>
           </div>
         </div>
+
+        {menuOpen && (
+          <nav id="mobile-navigation" className={styles.mobileMenu} aria-label="Mobile navigation">
+            <Link href="/" onClick={() => setMenuOpen(false)}>Browse tools</Link>
+            <Link href="/categories/" onClick={() => setMenuOpen(false)}>Categories</Link>
+            <Link href="/about/" onClick={() => setMenuOpen(false)}>About</Link>
+            <Link href="/contact/" onClick={() => setMenuOpen(false)}>Contact</Link>
+          </nav>
+        )}
       </header>
     </>
   );

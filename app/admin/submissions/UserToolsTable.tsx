@@ -1,0 +1,27 @@
+'use client';
+
+import { useMemo, useState } from 'react';
+import { reviewSubmission } from '../actions';
+import styles from '../admin.module.css';
+
+type SubmissionRow = { id: string; toolName: string; website: string; submitterName: string; submitterEmail: string; paymentStatus: string; paymentProvider: string | null; status: 'pending' | 'in_review' | 'approved' | 'rejected'; createdAt: string; updatedAt: string };
+
+export default function UserToolsTable({ rows }: { rows: SubmissionRow[] }) {
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState('all');
+  const [pageSize, setPageSize] = useState(10);
+  const [page, setPage] = useState(1);
+  const filtered = useMemo(() => rows.filter((row) => `${row.toolName} ${row.submitterName} ${row.submitterEmail}`.toLowerCase().includes(query.toLowerCase()) && (status === 'all' || row.status === status)), [rows, query, status]);
+  const pages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const currentPage = Math.min(page, pages);
+  const visible = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const date = (value: string) => new Intl.DateTimeFormat('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(value));
+
+  return <section className={styles.dataPanel}>
+    <div className={styles.dataTitle}><div><h1>User Tools</h1><p>Paid submissions waiting for verification and publishing.</p></div><label>Show <select value={pageSize} onChange={(event) => { setPageSize(Number(event.target.value)); setPage(1); }}><option>10</option><option>25</option><option>50</option></select> entries</label></div>
+    <div className={styles.tableFilters}><label className={styles.searchField}><span aria-hidden="true">⌕</span><input value={query} onChange={(event) => { setQuery(event.target.value); setPage(1); }} placeholder="Search User Tools..." /></label><select value={status} onChange={(event) => { setStatus(event.target.value); setPage(1); }}><option value="all">All statuses</option><option value="pending">Pending</option><option value="in_review">In review</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select></div>
+    <div className={styles.tableScroll}><table className={styles.dataTable}><thead><tr><th>Logo</th><th>Tool Name</th><th>Submitted By</th><th>Payment</th><th>Status</th><th>Created Date</th><th>Updated Date</th><th>Action</th></tr></thead><tbody>{visible.map((item) => <tr key={item.id}><td><span className={styles.tableLogo}>{item.toolName.slice(0,2).toUpperCase()}</span></td><td><a href={item.website} target="_blank" rel="noreferrer">{item.toolName}</a></td><td><strong>{item.submitterName}</strong><small>{item.submitterEmail}</small></td><td><span className={styles.paidText}>PAID</span><small>{item.paymentProvider || 'Online'}</small></td><td><span className={`${styles.status} ${styles[item.status]}`}>{item.status.replace('_',' ')}</span></td><td>{date(item.createdAt)}</td><td>{date(item.updatedAt)}</td><td><details className={styles.actionMenu}><summary aria-label={`Actions for ${item.toolName}`}>•••</summary><div><form action={reviewSubmission}><input name="id" type="hidden" value={item.id}/><button name="status" value="in_review">Mark in review</button><button name="status" value="approved">Verify & approve</button><button name="status" value="rejected">Reject</button></form></div></details></td></tr>)}</tbody></table></div>
+    {!visible.length && <div className={styles.emptyState}><strong>No paid user tools yet.</strong><p>Completed paid submissions will appear here for verification.</p></div>}
+    <footer className={styles.tableFooter}><span>Showing {filtered.length ? (currentPage - 1) * pageSize + 1 : 0} to {Math.min(currentPage * pageSize, filtered.length)} of {filtered.length} entries</span><div><button disabled={currentPage === 1} onClick={() => setPage((value) => Math.max(1, value - 1))}>‹</button><strong>{currentPage}</strong><span>of {pages}</span><button disabled={currentPage === pages} onClick={() => setPage((value) => Math.min(pages, value + 1))}>›</button></div></footer>
+  </section>;
+}

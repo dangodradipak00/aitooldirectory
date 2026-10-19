@@ -2,7 +2,7 @@
 .block, .helpOptions { min-width: 0; margin: 0; padding: 25px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow-sm); }
 .block legend { padding: 0 8px; color: var(--ink); font-size: 1rem; font-weight: 850; }
 .form label { display: grid; gap: 7px; color: var(--ink); font-size: .82rem; font-weight: 750; }
-.form input[type="text"], .form input[type="url"], .form input[type="search"], .form textarea { width: 100%; border: 1px solid var(--line); border-radius: 9px; padding: 12px 13px; color: var(--ink); background: var(--surface); font: inherit; font-weight: 500; }
+.form input[type="text"], .form input[type="url"], .form input[type="email"], .form input[type="search"], .form textarea { width: 100%; border: 1px solid var(--line); border-radius: 9px; padding: 12px 13px; color: var(--ink); background: var(--surface); font: inherit; font-weight: 500; }
 .twoColumns { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
 .help { margin: 0 0 17px; color: var(--text); font-size: .84rem; }
 .categorySearch { max-width: 580px; margin-bottom: 16px; }
@@ -24,8 +24,10 @@
 .notSure small { color: var(--muted); font-weight: 500; }
 .suggestButton { justify-self: start; border: 0; padding: 0; color: var(--blue); background: none; font-weight: 800; }
 .validation { margin: 0; color: #b42b43; font-size: .82rem; font-weight: 750; }
-.form > a { justify-self: start; }
+.form > button { justify-self: start; border: 0; }
 .previewNote { margin: -8px 0 0; color: var(--muted); font-size: .78rem; }
 .empty { color: var(--muted); }
+.honeypot { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
+.success { margin: 0; padding: 12px 14px; border: 1px solid #bfe5d2; border-radius: 10px; background: #eefaf4; color: #147a4b; font-weight: 700; }
 @media (max-width: 800px) { .secondaryGrid, .subcategoryGroup > div { grid-template-columns: repeat(2,minmax(0,1fr)); } }
 @media (max-width: 620px) { .block, .helpOptions { padding: 20px 16px; } .twoColumns, .categoryGrid, .secondaryGrid, .subcategoryGroup > div { grid-template-columns: 1fr; } }

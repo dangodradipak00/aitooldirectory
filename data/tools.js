@@ -1,4 +1,4 @@
-import { getCategory, getSubcategory } from './categories';
+import { getCategory, getSubcategory } from './categories.js';
 
 export const tools = [
   {

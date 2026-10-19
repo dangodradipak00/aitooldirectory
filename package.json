@@ -3,13 +3,35 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "node node_modules/next/dist/bin/next dev",
-    "build": "node node_modules/next/dist/bin/next build",
-    "start": "node node_modules/next/dist/bin/next start"
+    "dev": "node node_modules/next/dist/bin/next dev --webpack",
+    "build": "node node_modules/next/dist/bin/next build --webpack",
+    "start": "node node_modules/next/dist/bin/next start",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "node --experimental-strip-types scripts/migrate.ts",
+    "db:seed": "node --experimental-strip-types scripts/seed.ts"
   },
   "dependencies": {
+    "@neondatabase/auth": "^0.6.0-beta",
+    "@neondatabase/serverless": "^1.2.0",
+    "clsx": "^2.1.1",
+    "drizzle-orm": "^0.45.4",
     "next": "16.4.2",
     "react": "19.3.1",
-    "react-dom": "19.3.1"
+    "react-dom": "19.3.1",
+    "tailwind-merge": "^3.3.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@next/swc-win32-x64-msvc": "^16.4.2",
+    "@tailwindcss/oxide-win32-x64-msvc": "^4.3.3",
+    "@tailwindcss/postcss": "^4.1.14",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "dotenv": "^18.0.8",
+    "drizzle-kit": "^0.31.11",
+    "lightningcss-win32-x64-msvc": "^1.32.0",
+    "tailwindcss": "^4.1.14",
+    "typescript": "^5.9.3"
   }
 }
