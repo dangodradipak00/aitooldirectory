@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { signOutAdmin } from './actions';
 import styles from './admin.module.css';
@@ -41,6 +41,7 @@ export default function AdminChrome({ user, children }: {
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [categoryOpen, setCategoryOpen] = useState(pathname.includes('/categories') || pathname.includes('/subcategories'));
   const [toolsOpen, setToolsOpen] = useState(pathname.includes('/tools') || pathname.includes('/submissions'));
@@ -52,19 +53,19 @@ export default function AdminChrome({ user, children }: {
       <button className={`${styles.sidebarBackdrop} ${open ? styles.backdropVisible : ''}`} aria-label="Close navigation" onClick={() => setOpen(false)} />
       <aside className={`${styles.sidebar} ${open ? styles.sidebarOpen : ''}`}>
         <div className={styles.sidebarHead}>
-          <Link className={styles.adminBrand} href="/admin/" onClick={() => setOpen(false)}><span>A</span><strong>AgencyToolGuide</strong><small>Admin workspace</small></Link>
+          <Link className={styles.adminBrand} href="/admin/" onMouseEnter={() => router.prefetch('/admin/')} onFocus={() => router.prefetch('/admin/')} onClick={() => setOpen(false)}><span>A</span><strong>AgencyToolGuide</strong><small>Admin workspace</small></Link>
           <button className={styles.sidebarClose} type="button" aria-label="Close menu" onClick={() => setOpen(false)}><Icon name="close" /></button>
         </div>
         <p className={styles.navLabel}>Workspace</p>
         <nav aria-label="Admin navigation">
-          <Link href="/admin/" className={isCurrent(pathname, '/admin/') ? styles.activeNav : ''} onClick={() => setOpen(false)}><Icon name="grid" /><span>Dashboard</span></Link>
+          <Link href="/admin/" className={isCurrent(pathname, '/admin/') ? styles.activeNav : ''} onMouseEnter={() => router.prefetch('/admin/')} onFocus={() => router.prefetch('/admin/')} onClick={() => setOpen(false)}><Icon name="grid" /><span>Dashboard</span></Link>
           <div className={styles.navGroup}>
             <button type="button" className={(pathname.includes('/categories') || pathname.includes('/subcategories')) ? styles.activeGroup : ''} onClick={() => setCategoryOpen((value) => !value)} aria-expanded={categoryOpen}>
               <Icon name="category" /><span>Tool Category</span><i className={categoryOpen ? styles.chevronOpen : ''}><Icon name="chevron" /></i>
             </button>
             <div className={`${styles.subNav} ${categoryOpen ? styles.subNavOpen : ''}`}>
-              <Link href="/admin/categories/" className={isCurrent(pathname, '/admin/categories/') ? styles.activeSubNav : ''} onClick={() => setOpen(false)}>Category</Link>
-              <Link href="/admin/subcategories/" className={isCurrent(pathname, '/admin/subcategories/') ? styles.activeSubNav : ''} onClick={() => setOpen(false)}>Sub Category</Link>
+              <Link href="/admin/categories/" className={isCurrent(pathname, '/admin/categories/') ? styles.activeSubNav : ''} onMouseEnter={() => router.prefetch('/admin/categories/')} onFocus={() => router.prefetch('/admin/categories/')} onClick={() => setOpen(false)}>Category</Link>
+              <Link href="/admin/subcategories/" className={isCurrent(pathname, '/admin/subcategories/') ? styles.activeSubNav : ''} onMouseEnter={() => router.prefetch('/admin/subcategories/')} onFocus={() => router.prefetch('/admin/subcategories/')} onClick={() => setOpen(false)}>Sub Category</Link>
             </div>
           </div>
           <div className={styles.navGroup}>
@@ -72,12 +73,12 @@ export default function AdminChrome({ user, children }: {
               <Icon name="tool" /><span>Tools List</span><i className={toolsOpen ? styles.chevronOpen : ''}><Icon name="chevron" /></i>
             </button>
             <div className={`${styles.subNav} ${toolsOpen ? styles.subNavOpen : ''}`}>
-              <Link href="/admin/tools/" className={(pathname === '/admin/tools' || pathname === '/admin/tools/') ? styles.activeSubNav : ''} onClick={() => setOpen(false)}>Admin Tools</Link>
-              <Link href="/admin/submissions/" className={isCurrent(pathname, '/admin/submissions/') ? styles.activeSubNav : ''} onClick={() => setOpen(false)}>User Tools</Link>
-              <Link href="/admin/tools/new/" className={isCurrent(pathname, '/admin/tools/new/') ? styles.activeSubNav : ''} onClick={() => setOpen(false)}>Add New AI Tool</Link>
+              <Link href="/admin/tools/" className={(pathname === '/admin/tools' || pathname === '/admin/tools/') ? styles.activeSubNav : ''} onMouseEnter={() => router.prefetch('/admin/tools/')} onFocus={() => router.prefetch('/admin/tools/')} onClick={() => setOpen(false)}>Admin Tools</Link>
+              <Link href="/admin/submissions/" className={isCurrent(pathname, '/admin/submissions/') ? styles.activeSubNav : ''} onMouseEnter={() => router.prefetch('/admin/submissions/')} onFocus={() => router.prefetch('/admin/submissions/')} onClick={() => setOpen(false)}>User Tools</Link>
+              <Link href="/admin/tools/new/" className={isCurrent(pathname, '/admin/tools/new/') ? styles.activeSubNav : ''} onMouseEnter={() => router.prefetch('/admin/tools/new/')} onFocus={() => router.prefetch('/admin/tools/new/')} onClick={() => setOpen(false)}>Add New AI Tool</Link>
             </div>
           </div>
-          <Link href="/admin/blogs/" className={isCurrent(pathname, '/admin/blogs/') ? styles.activeNav : ''} onClick={() => setOpen(false)}><Icon name="document" /><span>Blogs</span></Link>
+          <Link href="/admin/blogs/" className={isCurrent(pathname, '/admin/blogs/') ? styles.activeNav : ''} onMouseEnter={() => router.prefetch('/admin/blogs/')} onFocus={() => router.prefetch('/admin/blogs/')} onClick={() => setOpen(false)}><Icon name="document" /><span>Blogs</span></Link>
         </nav>
         <p className={styles.navLabel}>Website</p>
         <nav aria-label="Website links"><Link href="/" target="_blank"><Icon name="external" /><span>View website</span></Link></nav>

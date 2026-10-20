@@ -2,41 +2,6 @@ import { getCategory, getSubcategory } from './categories.js';
 
 export const tools = [
   {
-    slug: 'agencyanalytics', name: 'AgencyAnalytics', initials: 'AA', pricing: 'Paid', published: true,
-    primaryCategoryId: 'data-analytics', secondaryCategoryIds: ['seo-marketing'],
-    subcategoryIds: ['data-analytics.reporting-dashboards', 'seo-marketing.marketing-analytics'],
-    website: 'https://agencyanalytics.com/',
-    summary: 'Reporting and dashboard software designed for marketing agencies managing multiple clients.',
-    bestFor: 'Agencies that want scheduled reports, reusable dashboards and client-facing branding in one place.',
-    highlights: ['Automated client reports', 'White-label dashboards', 'Multi-channel reporting']
-  },
-  {
-    slug: 'dashthis', name: 'DashThis', initials: 'DT', pricing: 'Paid', published: true,
-    primaryCategoryId: 'data-analytics', secondaryCategoryIds: ['seo-marketing'],
-    subcategoryIds: ['data-analytics.reporting-dashboards', 'seo-marketing.marketing-analytics'],
-    website: 'https://dashthis.com/',
-    summary: 'Marketing dashboard software focused on combining channel data into client-ready reports.',
-    bestFor: 'Small teams that value straightforward templates and a focused reporting workflow.',
-    highlights: ['Dashboard templates', 'Scheduled sharing', 'White-label options']
-  },
-  {
-    slug: 'looker-studio', name: 'Looker Studio', initials: 'LS', pricing: 'Free option', published: true,
-    primaryCategoryId: 'data-analytics', secondaryCategoryIds: [],
-    subcategoryIds: ['data-analytics.reporting-dashboards', 'data-analytics.data-visualization'],
-    website: 'https://lookerstudio.google.com/',
-    summary: 'Google’s flexible data-visualisation tool for building custom dashboards and reports.',
-    bestFor: 'Agencies comfortable creating tailored dashboards and managing their own data connectors.',
-    highlights: ['Custom dashboards', 'Google data sources', 'Shareable reports']
-  },
-  {
-    slug: 'screaming-frog', name: 'Screaming Frog SEO Spider', initials: 'SF', pricing: 'Free option', published: true,
-    primaryCategoryId: 'seo-marketing', secondaryCategoryIds: [], subcategoryIds: ['seo-marketing.seo-audits'],
-    website: 'https://www.screamingfrog.co.uk/seo-spider/',
-    summary: 'Desktop website crawler used to inspect technical SEO issues across a site.',
-    bestFor: 'SEO specialists who need detailed crawl data and control over technical audits.',
-    highlights: ['Technical crawling', 'Redirect checks', 'Metadata auditing']
-  },
-  {
     slug: 'ahrefs', name: 'Ahrefs', initials: 'AH', pricing: 'Paid', published: true,
     primaryCategoryId: 'seo-marketing', secondaryCategoryIds: [],
     subcategoryIds: ['seo-marketing.keyword-research', 'seo-marketing.seo-audits', 'seo-marketing.rank-tracking'],
@@ -96,60 +61,6 @@ export const tools = [
         { question: 'How do I get started with Ahrefs?', answer: 'Create an Ahrefs account, add or verify your website and set up a project. You can then run a site audit, research competitors and keywords, and add important keywords to Rank Tracker.' }
       ]
     }
-  },
-  {
-    slug: 'se-ranking', name: 'SE Ranking', initials: 'SR', pricing: 'Paid', published: true,
-    primaryCategoryId: 'seo-marketing', secondaryCategoryIds: [],
-    subcategoryIds: ['seo-marketing.seo-audits', 'seo-marketing.rank-tracking'],
-    website: 'https://seranking.com/',
-    summary: 'SEO platform with rank tracking, website auditing and agency reporting tools.',
-    bestFor: 'Smaller agencies that need a broad SEO toolkit with client reporting options.',
-    highlights: ['Rank tracking', 'Website audits', 'Agency reporting']
-  },
-  {
-    slug: 'semrush', name: 'Semrush', initials: 'SE', pricing: 'Paid', published: true,
-    primaryCategoryId: 'seo-marketing', secondaryCategoryIds: [],
-    subcategoryIds: ['seo-marketing.keyword-research', 'seo-marketing.seo-audits', 'seo-marketing.rank-tracking'],
-    website: 'https://www.semrush.com/',
-    summary: 'SEO and competitive research platform for keyword discovery, site auditing and position tracking.',
-    bestFor: 'Marketing teams and agencies that want SEO research, monitoring and competitive insights in one toolkit.',
-    highlights: ['Keyword research', 'Site audits', 'Position tracking']
-  },
-  {
-    slug: 'moz-pro', name: 'Moz Pro', initials: 'MZ', pricing: 'Paid', published: true,
-    primaryCategoryId: 'seo-marketing', secondaryCategoryIds: [],
-    subcategoryIds: ['seo-marketing.keyword-research', 'seo-marketing.seo-audits', 'seo-marketing.rank-tracking'],
-    website: 'https://moz.com/products/pro',
-    summary: 'SEO software suite for keyword research, site crawling and search-rank monitoring.',
-    bestFor: 'Teams that want guided keyword research, technical site checks and ranking visibility.',
-    highlights: ['Keyword Explorer', 'Site Crawl', 'Rank tracking']
-  },
-  {
-    slug: 'callrail', name: 'CallRail', initials: 'CR', pricing: 'Paid', published: true,
-    primaryCategoryId: 'sales-customer-support', secondaryCategoryIds: ['seo-marketing'],
-    subcategoryIds: ['sales-customer-support.call-tracking-conversation-analytics', 'seo-marketing.marketing-analytics'],
-    website: 'https://www.callrail.com/',
-    summary: 'Call tracking and lead attribution software for marketing teams and agencies.',
-    bestFor: 'Lead-generation agencies that need to connect inbound calls with marketing sources.',
-    highlights: ['Call attribution', 'Conversation insights', 'Lead tracking']
-  },
-  {
-    slug: 'whatconverts', name: 'WhatConverts', initials: 'WC', pricing: 'Paid', published: true,
-    primaryCategoryId: 'sales-customer-support', secondaryCategoryIds: ['seo-marketing'],
-    subcategoryIds: ['sales-customer-support.call-tracking-conversation-analytics', 'seo-marketing.marketing-analytics'],
-    website: 'https://www.whatconverts.com/',
-    summary: 'Lead tracking platform covering calls, forms and chats with marketing attribution.',
-    bestFor: 'Agencies that want one view of several lead types and their campaign sources.',
-    highlights: ['Multi-lead tracking', 'Campaign attribution', 'Agency reporting']
-  },
-  {
-    slug: 'calltrackingmetrics', name: 'CallTrackingMetrics', initials: 'CM', pricing: 'Paid', published: true,
-    primaryCategoryId: 'sales-customer-support', secondaryCategoryIds: [],
-    subcategoryIds: ['sales-customer-support.call-tracking-conversation-analytics'],
-    website: 'https://www.ctm.com/',
-    summary: 'Conversation analytics and call tracking software with routing and attribution features.',
-    bestFor: 'Agencies working with higher call volumes or more complex routing requirements.',
-    highlights: ['Call tracking', 'Conversation analytics', 'Call routing']
   }
 ];
 

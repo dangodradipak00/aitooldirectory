@@ -1,6 +1,6 @@
 'use server';
 
-import { and, eq } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
@@ -8,6 +8,7 @@ import { assertAdmin } from '@/lib/auth/admin';
 import { auth } from '@/lib/auth/server';
 import { getDb } from '@/lib/db';
 import { blogPosts, categories, subcategories, tools, toolSubmissions } from '@/lib/db/schema';
+import { uploadToolImage } from '@/lib/storage/neon';
 
 export type FormState = { error?: string; success?: string } | null;
 
@@ -19,10 +20,11 @@ const toolSchema = z.object({
   slug,
   website: z.url(),
   summary: z.string().trim().min(20).max(500),
-  bestFor: z.string().trim().max(500),
-  pricing: z.string().trim().min(2).max(80),
-  logoUrl: optionalUrl,
+  contentMarkdown: z.string().trim().min(80).max(100000),
+  pricing: z.enum(['Free', 'Freemium', 'Paid']),
   primaryCategoryId: z.string().trim().min(1),
+  seoTitle: z.string().trim().max(60),
+  seoDescription: z.string().trim().max(160),
   status: z.enum(['draft', 'published', 'archived'])
 });
 
@@ -41,21 +43,42 @@ function text(formData: FormData, key: string) {
   return String(formData.get(key) || '');
 }
 
-function lines(formData: FormData, key: string) {
-  return text(formData, key).split(/\r?\n/).map((value) => value.trim()).filter(Boolean);
-}
-
-function pairedLines(formData: FormData, key: string, left: string, right: string) {
-  return lines(formData, key).map((value) => {
-    const [first, ...rest] = value.split('|');
-    return { [left]: first.trim(), [right]: rest.join('|').trim() };
-  }).filter((value) => value[left] && value[right]);
-}
-
 function message(error: unknown) {
   if (error instanceof z.ZodError) return error.issues[0]?.message || 'Check the form fields.';
   if (error instanceof Error && error.message.includes('duplicate key')) return 'This slug is already in use.';
   return error instanceof Error ? error.message : 'Something went wrong.';
+}
+
+function structuredToolContent(formData: FormData) {
+  const item = z.string().trim().min(2).max(500);
+  const list = (key: 'pros' | 'cons') => z.array(item).max(20).parse(
+    formData.getAll(key).map(String).map((value) => value.trim()).filter(Boolean)
+  );
+  const useCaseTitles = formData.getAll('useCaseTitles').map(String);
+  const useCaseDescriptions = formData.getAll('useCaseDescriptions').map(String);
+  const useCases = Array.from({ length: Math.max(useCaseTitles.length, useCaseDescriptions.length) }, (_, index) => ({
+    title: (useCaseTitles[index] || '').trim(),
+    description: (useCaseDescriptions[index] || '').trim()
+  })).filter(({ title, description }) => title || description);
+  if (useCases.some(({ title, description }) => !title || !description)) {
+    throw new Error('Every use case needs both a title and description.');
+  }
+  const faqQuestions = formData.getAll('faqQuestions').map(String);
+  const faqAnswers = formData.getAll('faqAnswers').map(String);
+  const faqs = Array.from({ length: Math.max(faqQuestions.length, faqAnswers.length) }, (_, index) => ({
+    question: (faqQuestions[index] || '').trim(),
+    answer: (faqAnswers[index] || '').trim()
+  })).filter(({ question, answer }) => question || answer);
+  if (faqs.some(({ question, answer }) => !question || !answer)) {
+    throw new Error('Every FAQ needs both a question and answer.');
+  }
+  return {
+    pros: list('pros'),
+    cons: list('cons'),
+    features: [],
+    useCases: z.array(z.object({ title: z.string().min(2).max(160), description: z.string().min(2).max(700) })).max(20).parse(useCases),
+    faqs: z.array(z.object({ question: z.string().min(2).max(160), answer: z.string().min(2).max(700) })).max(30).parse(faqs)
+  };
 }
 
 export async function signInAdmin(_state: FormState, formData: FormData): Promise<FormState> {
@@ -80,31 +103,28 @@ export async function createTool(_state: FormState, formData: FormData): Promise
     const admin = await assertAdmin();
     const values = toolSchema.parse({
       name: text(formData, 'name'), slug: text(formData, 'slug'), website: text(formData, 'website'),
-      summary: text(formData, 'summary'), bestFor: text(formData, 'bestFor'), pricing: text(formData, 'pricing'),
-      logoUrl: text(formData, 'logoUrl'), primaryCategoryId: text(formData, 'primaryCategoryId'), status: text(formData, 'status')
+      summary: text(formData, 'summary'), contentMarkdown: text(formData, 'contentMarkdown'), pricing: text(formData, 'pricing'),
+      primaryCategoryId: text(formData, 'primaryCategoryId'), seoTitle: text(formData, 'seoTitle'),
+      seoDescription: text(formData, 'seoDescription'), status: text(formData, 'status')
     });
+    const logoFile = formData.get('logoFile');
+    const websiteImageFile = formData.get('websiteImageFile');
+    const structuredContent = structuredToolContent(formData);
+    const [logoUrl, websiteImageUrl] = await Promise.all([
+      logoFile instanceof File && logoFile.size ? uploadToolImage(logoFile, 'logo') : null,
+      websiteImageFile instanceof File && websiteImageFile.size ? uploadToolImage(websiteImageFile, 'website') : null
+    ]);
     await getDb().insert(tools).values({
       ...values,
-      logoUrl: values.logoUrl || null,
-      websiteImageUrl: text(formData, 'websiteImageUrl') || null,
+      logoUrl,
+      websiteImageUrl,
+      ...structuredContent,
+      conclusion: null,
+      bestFor: '',
       secondaryCategoryIds: formData.getAll('secondaryCategoryIds').map(String).filter(Boolean),
       subcategoryIds: formData.getAll('subcategoryIds').map(String).filter(Boolean),
-      highlights: lines(formData, 'highlights'),
-      details: {
-        startingPrice: text(formData, 'startingPrice'),
-        freeOption: text(formData, 'freeOption'),
-        pricingVerified: text(formData, 'pricingVerified'),
-        audience: text(formData, 'audience'),
-        introduction: text(formData, 'introduction'),
-        features: pairedLines(formData, 'features', 'name', 'description'),
-        workflow: lines(formData, 'workflow'),
-        pricingSummary: text(formData, 'pricingSummary'),
-        pros: lines(formData, 'pros'),
-        cons: lines(formData, 'cons'),
-        useCases: pairedLines(formData, 'useCases', 'name', 'description'),
-        editorialSummary: text(formData, 'editorialSummary'),
-        faqs: pairedLines(formData, 'faqs', 'question', 'answer')
-      },
+      highlights: [],
+      details: null,
       socialLinks: [
         ['x', 'X', text(formData, 'xUrl')],
         ['facebook', 'Facebook', text(formData, 'facebookUrl')],
@@ -112,21 +132,225 @@ export async function createTool(_state: FormState, formData: FormData): Promise
         ['linkedin', 'LinkedIn', text(formData, 'linkedinUrl')],
         ['email', 'Email', text(formData, 'supportEmail') ? `mailto:${text(formData, 'supportEmail')}` : '']
       ].filter((item) => item[2]).map(([network, label, url]) => ({ network, label: `${values.name} on ${label}`, url })),
-      seoTitle: text(formData, 'seoTitle') || null,
-      seoDescription: text(formData, 'seoDescription') || null,
-      metaKeywords: text(formData, 'metaKeywords') || null,
+      seoTitle: values.seoTitle || null,
+      seoDescription: values.seoDescription || null,
       verified: formData.get('verified') === 'on',
-      affiliate: formData.get('affiliate') === 'on',
-      featured: formData.get('featured') === 'on',
-      followLink: formData.get('followLink') === 'on',
+      followLink: text(formData, 'followLink') === 'dofollow',
       submittedByAuthId: admin.id,
       publishedAt: values.status === 'published' ? new Date() : null
     });
     revalidatePath('/admin/tools/');
+    revalidatePath(`/tools/${values.slug}/`);
     return { success: 'Tool saved.' };
   } catch (error) {
     return { error: message(error) };
   }
+}
+
+export async function updateTool(toolId: string, _state: FormState, formData: FormData): Promise<FormState> {
+  try {
+    await assertAdmin();
+    const id = z.uuid().parse(toolId);
+    const db = getDb();
+    const [existing] = await db.select().from(tools).where(eq(tools.id, id)).limit(1);
+    if (!existing) return { error: 'Tool not found.' };
+
+    const values = toolSchema.parse({
+      name: text(formData, 'name'), slug: text(formData, 'slug'), website: text(formData, 'website'),
+      summary: text(formData, 'summary'), contentMarkdown: text(formData, 'contentMarkdown'), pricing: text(formData, 'pricing'),
+      primaryCategoryId: text(formData, 'primaryCategoryId'), seoTitle: text(formData, 'seoTitle'),
+      seoDescription: text(formData, 'seoDescription'), status: text(formData, 'status')
+    });
+    const logoFile = formData.get('logoFile');
+    const websiteImageFile = formData.get('websiteImageFile');
+    const structuredContent = structuredToolContent(formData);
+    const [newLogoUrl, newWebsiteImageUrl] = await Promise.all([
+      logoFile instanceof File && logoFile.size ? uploadToolImage(logoFile, 'logo') : null,
+      websiteImageFile instanceof File && websiteImageFile.size ? uploadToolImage(websiteImageFile, 'website') : null
+    ]);
+    await db.update(tools).set({
+      ...values,
+      logoUrl: newLogoUrl || existing.logoUrl,
+      websiteImageUrl: newWebsiteImageUrl || existing.websiteImageUrl,
+      ...structuredContent,
+      conclusion: null,
+      details: null,
+      secondaryCategoryIds: formData.getAll('secondaryCategoryIds').map(String).filter(Boolean),
+      subcategoryIds: formData.getAll('subcategoryIds').map(String).filter(Boolean),
+      socialLinks: [
+        ['x', 'X', text(formData, 'xUrl')],
+        ['facebook', 'Facebook', text(formData, 'facebookUrl')],
+        ['youtube', 'YouTube', text(formData, 'youtubeUrl')],
+        ['linkedin', 'LinkedIn', text(formData, 'linkedinUrl')],
+        ['email', 'Email', text(formData, 'supportEmail') ? `mailto:${text(formData, 'supportEmail')}` : '']
+      ].filter((item) => item[2]).map(([network, label, url]) => ({ network, label: `${values.name} on ${label}`, url })),
+      seoTitle: values.seoTitle || null,
+      seoDescription: values.seoDescription || null,
+      verified: formData.get('verified') === 'on',
+      followLink: text(formData, 'followLink') === 'dofollow',
+      publishedAt: values.status === 'published' ? existing.publishedAt || new Date() : null,
+      updatedAt: new Date()
+    }).where(eq(tools.id, id));
+
+    revalidatePath('/');
+    revalidatePath('/admin/tools/');
+    revalidatePath('/admin/submissions/');
+    revalidatePath('/categories/');
+    revalidatePath('/tool-sitemap.xml');
+    revalidatePath(`/tools/${existing.slug}/`);
+    revalidatePath(`/tools/${values.slug}/`);
+    return { success: 'Tool updated. The saved values are now used by the live tool page.' };
+  } catch (error) {
+    return { error: message(error) };
+  }
+}
+
+export async function updateSubmission(submissionId: string, _state: FormState, formData: FormData): Promise<FormState> {
+  try {
+    await assertAdmin();
+    const id = z.uuid().parse(submissionId);
+    const db = getDb();
+    const [existing] = await db.select().from(toolSubmissions).where(eq(toolSubmissions.id, id)).limit(1);
+    if (!existing) return { error: 'User tool submission not found.' };
+
+    const values = toolSchema.omit({ status: true }).parse({
+      name: text(formData, 'name'), slug: text(formData, 'slug'), website: text(formData, 'website'),
+      summary: text(formData, 'summary'), contentMarkdown: text(formData, 'contentMarkdown'), pricing: text(formData, 'pricing'),
+      primaryCategoryId: text(formData, 'primaryCategoryId'), seoTitle: text(formData, 'seoTitle'),
+      seoDescription: text(formData, 'seoDescription')
+    });
+    const logoFile = formData.get('logoFile');
+    const websiteImageFile = formData.get('websiteImageFile');
+    const structuredContent = structuredToolContent(formData);
+    const [newLogoUrl, newWebsiteImageUrl] = await Promise.all([
+      logoFile instanceof File && logoFile.size ? uploadToolImage(logoFile, 'logo') : null,
+      websiteImageFile instanceof File && websiteImageFile.size ? uploadToolImage(websiteImageFile, 'website') : null
+    ]);
+    const logoUrl = newLogoUrl || existing.logoUrl;
+    const websiteImageUrl = newWebsiteImageUrl || existing.websiteImageUrl;
+    const subcategoryIds = formData.getAll('subcategoryIds').map(String).filter(Boolean);
+    const socialLinks = [
+      ['x', 'X', text(formData, 'xUrl')],
+      ['facebook', 'Facebook', text(formData, 'facebookUrl')],
+      ['youtube', 'YouTube', text(formData, 'youtubeUrl')],
+      ['linkedin', 'LinkedIn', text(formData, 'linkedinUrl')],
+      ['email', 'Email', text(formData, 'supportEmail') ? `mailto:${text(formData, 'supportEmail')}` : '']
+    ].filter((item) => item[2]).map(([network, label, url]) => ({ network, label: `${values.name} on ${label}`, url }));
+    const requestedPublicationStatus = text(formData, 'publicationStatus');
+    const publicationStatus = requestedPublicationStatus
+      ? z.enum(['draft', 'published', 'archived']).parse(requestedPublicationStatus)
+      : null;
+
+    await db.update(toolSubmissions).set({
+      toolName: values.name,
+      slug: values.slug,
+      website: values.website,
+      description: values.summary,
+      contentMarkdown: values.contentMarkdown,
+      pricing: values.pricing,
+      logoUrl,
+      websiteImageUrl,
+      ...structuredContent,
+      primaryCategoryId: values.primaryCategoryId,
+      secondaryCategoryIds: [],
+      subcategoryIds,
+      socialLinks,
+      seoTitle: values.seoTitle || null,
+      seoDescription: values.seoDescription || null,
+      updatedAt: new Date()
+    }).where(eq(toolSubmissions.id, id));
+
+    // Older versions created a linked draft as soon as Edit was clicked.
+    // Keep no public record until approval; approved user tools stay managed here.
+    if (existing.promotedToolId && existing.status !== 'approved') {
+      await db.delete(tools).where(eq(tools.id, existing.promotedToolId));
+    }
+    if (existing.promotedToolId && existing.status === 'approved') {
+      const [publicTool] = await db.select().from(tools).where(eq(tools.id, existing.promotedToolId)).limit(1);
+      if (publicTool) {
+        const nextStatus = publicationStatus || publicTool.status;
+        await db.update(tools).set({
+          name: values.name,
+          slug: values.slug,
+          website: values.website,
+          summary: values.summary,
+          contentMarkdown: values.contentMarkdown,
+          pricing: values.pricing,
+          logoUrl,
+          websiteImageUrl,
+          ...structuredContent,
+          primaryCategoryId: values.primaryCategoryId,
+          secondaryCategoryIds: [],
+          subcategoryIds,
+          socialLinks,
+          seoTitle: values.seoTitle || null,
+          seoDescription: values.seoDescription || null,
+          status: nextStatus,
+          publishedAt: nextStatus === 'published' ? publicTool.publishedAt || new Date() : null,
+          updatedAt: new Date()
+        }).where(eq(tools.id, publicTool.id));
+        revalidatePath(`/tools/${publicTool.slug}/`);
+        revalidatePath(`/tools/${values.slug}/`);
+        revalidatePath('/');
+        revalidatePath('/categories/');
+        revalidatePath('/tool-sitemap.xml');
+      }
+    }
+
+    revalidatePath('/admin/');
+    revalidatePath('/admin/tools/');
+    revalidatePath('/admin/submissions/');
+    revalidatePath(`/admin/submissions/${id}/edit/`);
+    return { success: 'User Tool updated. It remains in User Tools.' };
+  } catch (error) {
+    return { error: message(error) };
+  }
+}
+
+function submissionSlug(name: string) {
+  return name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 90);
+}
+
+async function ensureSubmissionTool(submissionId: string) {
+  const db = getDb();
+  const [submission] = await db.select().from(toolSubmissions).where(eq(toolSubmissions.id, submissionId)).limit(1);
+  if (!submission) throw new Error('User tool submission not found.');
+  if (submission.promotedToolId) {
+    const [existing] = await db.select().from(tools).where(eq(tools.id, submission.promotedToolId)).limit(1);
+    if (existing) return existing;
+  }
+
+  const baseSlug = submissionSlug(submission.toolName) || `tool-${submission.id.slice(0, 8)}`;
+  const [slugMatch] = await db.select({ id: tools.id }).from(tools).where(eq(tools.slug, baseSlug)).limit(1);
+  const uniqueSlug = slugMatch ? `${baseSlug.slice(0, 82)}-${submission.id.slice(0, 7)}` : baseSlug;
+  const [created] = await db.insert(tools).values({
+    name: submission.toolName,
+    slug: uniqueSlug,
+    website: submission.website,
+    summary: submission.description,
+    pricing: submission.pricing,
+    logoUrl: submission.logoUrl,
+    websiteImageUrl: submission.websiteImageUrl,
+    contentMarkdown: submission.contentMarkdown,
+    pros: submission.pros,
+    cons: submission.cons,
+    useCases: submission.useCases,
+    faqs: submission.faqs,
+    socialLinks: submission.socialLinks,
+    seoTitle: submission.seoTitle,
+    seoDescription: submission.seoDescription,
+    primaryCategoryId: submission.primaryCategoryId,
+    secondaryCategoryIds: submission.secondaryCategoryIds,
+    subcategoryIds: submission.subcategoryIds,
+    status: 'draft',
+    submittedByAuthId: submission.submittedByAuthId
+  }).returning();
+  await db.update(toolSubmissions).set({
+    promotedToolId: created.id,
+    status: submission.status === 'pending' ? 'in_review' : submission.status,
+    updatedAt: new Date()
+  }).where(eq(toolSubmissions.id, submission.id));
+  return created;
 }
 
 export async function createBlog(_state: FormState, formData: FormData): Promise<FormState> {
@@ -207,6 +431,23 @@ export async function setToolStatus(formData: FormData) {
   revalidatePath('/admin/tools/');
 }
 
+export async function deleteTool(formData: FormData) {
+  await assertAdmin();
+  const id = z.uuid().parse(text(formData, 'id'));
+  const db = getDb();
+  const [tool] = await db.select({ slug: tools.slug }).from(tools).where(eq(tools.id, id)).limit(1);
+  if (!tool) return;
+
+  await db.delete(tools).where(eq(tools.id, id));
+  revalidatePath('/admin/');
+  revalidatePath('/admin/tools/');
+  revalidatePath('/admin/submissions/');
+  revalidatePath('/');
+  revalidatePath('/categories/');
+  revalidatePath(`/tools/${tool.slug}/`);
+  revalidatePath('/tool-sitemap.xml');
+}
+
 export async function setBlogStatus(formData: FormData) {
   await assertAdmin();
   const values = z.object({ id: z.uuid(), status: z.enum(['draft', 'published', 'archived']) }).parse({
@@ -234,22 +475,35 @@ export async function reviewSubmission(formData: FormData) {
   }).where(eq(toolSubmissions.id, values.id));
 
   if (values.status === 'approved') {
-    const [submission] = await db.select().from(toolSubmissions).where(and(eq(toolSubmissions.id, values.id), eq(toolSubmissions.status, 'approved'))).limit(1);
-    if (submission) {
-      const generatedSlug = submission.toolName.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 90);
-      await db.insert(tools).values({
-        name: submission.toolName,
-        slug: generatedSlug || `tool-${submission.id.slice(0, 8)}`,
-        website: submission.website,
-        summary: submission.description,
-        primaryCategoryId: submission.primaryCategoryId,
-        secondaryCategoryIds: submission.secondaryCategoryIds,
-        subcategoryIds: submission.subcategoryIds,
-        status: 'draft',
-        submittedByAuthId: submission.submittedByAuthId
-      }).onConflictDoNothing({ target: tools.slug });
+    await ensureSubmissionTool(values.id);
+  } else {
+    const [submission] = await db.select({ promotedToolId: toolSubmissions.promotedToolId }).from(toolSubmissions).where(eq(toolSubmissions.id, values.id)).limit(1);
+    if (submission?.promotedToolId) {
+      await db.update(tools).set({ status: 'draft', publishedAt: null, updatedAt: new Date() }).where(eq(tools.id, submission.promotedToolId));
     }
   }
   revalidatePath('/admin/submissions/');
   revalidatePath('/admin/tools/');
+}
+
+export async function setSubmissionPaymentStatus(formData: FormData) {
+  await assertAdmin();
+  const values = z.object({ id: z.uuid(), paymentStatus: z.enum(['paid', 'unpaid']) }).parse({
+    id: text(formData, 'id'), paymentStatus: text(formData, 'paymentStatus')
+  });
+  await getDb().update(toolSubmissions).set({
+    paymentStatus: values.paymentStatus,
+    paymentProvider: values.paymentStatus === 'paid' ? 'manual' : null,
+    paymentReference: values.paymentStatus === 'paid' ? 'manual-payment' : null,
+    updatedAt: new Date()
+  }).where(eq(toolSubmissions.id, values.id));
+  revalidatePath('/admin/submissions/');
+}
+
+export async function deleteSubmission(formData: FormData) {
+  await assertAdmin();
+  const id = z.uuid().parse(text(formData, 'id'));
+  await getDb().delete(toolSubmissions).where(eq(toolSubmissions.id, id));
+  revalidatePath('/admin/submissions/');
+  revalidatePath('/admin/');
 }

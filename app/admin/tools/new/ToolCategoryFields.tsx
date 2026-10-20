@@ -9,11 +9,13 @@ type SubcategoryOption = CategoryOption & { parentCategoryId: string };
 type ToolCategoryFieldsProps = {
   categories: CategoryOption[];
   subcategories: SubcategoryOption[];
+  initialPrimaryCategoryId?: string;
+  initialSubcategoryIds?: string[];
 };
 
-export default function ToolCategoryFields({ categories, subcategories }: ToolCategoryFieldsProps) {
-  const [primaryCategoryId, setPrimaryCategoryId] = useState('');
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+export default function ToolCategoryFields({ categories, subcategories, initialPrimaryCategoryId = '', initialSubcategoryIds = [] }: ToolCategoryFieldsProps) {
+  const [primaryCategoryId, setPrimaryCategoryId] = useState(initialPrimaryCategoryId);
+  const [selectedIds, setSelectedIds] = useState<string[]>(initialSubcategoryIds);
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
   const pickerRef = useRef<HTMLDivElement>(null);
@@ -64,18 +66,36 @@ export default function ToolCategoryFields({ categories, subcategories }: ToolCa
 
       <div ref={pickerRef} className={styles.categoryPicker}>
         <span className={styles.categoryPickerLabel}>Sub categories</span>
-        <div className={`${styles.multiControl} ${open ? styles.multiControlOpen : ''}`}>
+        <div
+          className={`${styles.multiControl} ${open ? styles.multiControlOpen : ''} ${!primaryCategoryId ? styles.multiControlDisabled : ''}`}
+          role="combobox"
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          aria-disabled={!primaryCategoryId}
+          tabIndex={primaryCategoryId ? 0 : -1}
+          onClick={() => {
+            if (primaryCategoryId) setOpen(true);
+          }}
+          onKeyDown={(event) => {
+            if (event.target !== event.currentTarget || !primaryCategoryId) return;
+            if (event.key === 'Enter' || event.key === ' ' || event.key === 'ArrowDown') {
+              event.preventDefault();
+              setOpen(true);
+            }
+            if (event.key === 'Escape') setOpen(false);
+          }}
+        >
           <div className={styles.multiChips}>
             {selectedSubcategories.length === 0 ? (
               <span className={styles.multiPlaceholder}>{primaryCategoryId ? 'Select one or more sub categories' : 'Select primary category first'}</span>
             ) : selectedSubcategories.map((subcategory) => (
               <span key={subcategory.id} className={styles.multiChip}>
                 {subcategory.name}
-                <button type="button" aria-label={`Remove ${subcategory.name}`} onClick={() => toggleSubcategory(subcategory.id)}>×</button>
+                <button type="button" aria-label={`Remove ${subcategory.name}`} onClick={(event) => { event.stopPropagation(); toggleSubcategory(subcategory.id); }}>×</button>
               </span>
             ))}
           </div>
-          <button type="button" className={styles.multiToggle} aria-label="Choose sub categories" aria-expanded={open} disabled={!primaryCategoryId} onClick={() => setOpen((current) => !current)}>
+          <button type="button" className={styles.multiToggle} aria-label="Choose sub categories" aria-expanded={open} disabled={!primaryCategoryId} onClick={(event) => { event.stopPropagation(); setOpen((current) => !current); }}>
             <span aria-hidden>⌄</span>
           </button>
         </div>

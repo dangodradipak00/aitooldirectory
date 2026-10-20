@@ -9,7 +9,7 @@ async function migrate() {
   if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL is missing from .env.local.');
   const sql = neon(process.env.DATABASE_URL);
   await sql.query('CREATE TABLE IF NOT EXISTS app_migrations (name text PRIMARY KEY, applied_at timestamp with time zone DEFAULT now() NOT NULL)');
-  const migrations = ['0001_admin_foundation', '0002_subcategories', '0003_submission_payments', '0004_tool_details'];
+  const migrations = ['0001_admin_foundation', '0002_subcategories', '0003_submission_payments', '0004_tool_details', '0005_tool_markdown', '0006_tool_structured_sections', '0007_tool_use_cases_faqs', '0008_tool_conclusion', '0009_submission_tool_link', '0010_submission_details'];
   for (const name of migrations) {
     const applied = await sql.query('SELECT name FROM app_migrations WHERE name = $1 LIMIT 1', [name]);
     if (applied.length) {

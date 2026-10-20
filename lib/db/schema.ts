@@ -41,6 +41,13 @@ export const tools = pgTable('tools', {
   pricing: text('pricing').notNull().default('Contact vendor'),
   logoUrl: text('logo_url'),
   websiteImageUrl: text('website_image_url'),
+  contentMarkdown: text('content_markdown'),
+  conclusion: text('conclusion'),
+  pros: jsonb('pros').$type<string[]>().notNull().default([]),
+  cons: jsonb('cons').$type<string[]>().notNull().default([]),
+  features: jsonb('features').$type<Array<{ title: string; description: string }>>().notNull().default([]),
+  useCases: jsonb('use_cases').$type<Array<{ title: string; description: string }>>().notNull().default([]),
+  faqs: jsonb('faqs').$type<Array<{ question: string; answer: string }>>().notNull().default([]),
   primaryCategoryId: text('primary_category_id').references(() => categories.id, { onDelete: 'set null' }),
   secondaryCategoryIds: jsonb('secondary_category_ids').$type<string[]>().notNull().default([]),
   subcategoryIds: jsonb('subcategory_ids').$type<string[]>().notNull().default([]),
@@ -69,6 +76,18 @@ export const toolSubmissions = pgTable('tool_submissions', {
   toolName: text('tool_name').notNull(),
   website: text('website').notNull(),
   description: text('description').notNull(),
+  slug: text('slug'),
+  logoUrl: text('logo_url'),
+  websiteImageUrl: text('website_image_url'),
+  contentMarkdown: text('content_markdown'),
+  pricing: text('pricing').notNull().default('Paid'),
+  pros: jsonb('pros').$type<string[]>().notNull().default([]),
+  cons: jsonb('cons').$type<string[]>().notNull().default([]),
+  useCases: jsonb('use_cases').$type<Array<{ title: string; description: string }>>().notNull().default([]),
+  faqs: jsonb('faqs').$type<Array<{ question: string; answer: string }>>().notNull().default([]),
+  socialLinks: jsonb('social_links').$type<Array<{ network: string; label: string; url: string }>>().notNull().default([]),
+  seoTitle: text('seo_title'),
+  seoDescription: text('seo_description'),
   submitterName: text('submitter_name').notNull(),
   submitterEmail: text('submitter_email').notNull(),
   primaryCategoryId: text('primary_category_id'),
@@ -82,9 +101,13 @@ export const toolSubmissions = pgTable('tool_submissions', {
   reviewNotes: text('review_notes'),
   submittedByAuthId: text('submitted_by_auth_id'),
   reviewedByAuthId: text('reviewed_by_auth_id'),
+  promotedToolId: uuid('promoted_tool_id').references(() => tools.id, { onDelete: 'set null' }),
   reviewedAt: timestamp('reviewed_at', { withTimezone: true }),
   ...timestamps
-}, (table) => [index('tool_submissions_status_idx').on(table.status)]);
+}, (table) => [
+  index('tool_submissions_status_idx').on(table.status),
+  index('tool_submissions_promoted_tool_idx').on(table.promotedToolId)
+]);
 
 export const blogPosts = pgTable('blog_posts', {
   id: uuid('id').defaultRandom().primaryKey(),

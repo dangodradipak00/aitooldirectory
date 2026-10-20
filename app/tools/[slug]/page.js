@@ -7,9 +7,11 @@ import { ExternalIcon, VerifiedIcon } from '../../../components/Icons';
 import EmbedBadge from './EmbedBadge';
 import ShareButton from './ShareButton';
 import { getCategory, getSubcategory, mainCategories } from '../../../data/categories';
-import { getTool, getToolsByCategory, publishedTools } from '../../../data/tools';
+import { publishedTools } from '../../../data/tools';
 import { getVendorLinkRel } from '../../../lib/link-utils';
+import { getPublicRelatedTools, getPublicTool } from '../../../lib/public-tools';
 import { absoluteUrl, editorialTeamName } from '../../../lib/site';
+import MarkdownContent from '../../../components/MarkdownContent';
 import styles from './page.module.css';
 import ui from '../../../styles/ui.module.css';
 
@@ -28,19 +30,17 @@ function getPricingType(pricing) {
   return 'Premium';
 }
 
-export const dynamicParams = false;
-
 export function generateStaticParams() {
   return publishedTools.map((tool) => ({ slug: tool.slug }));
 }
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const tool = getTool(slug);
+  const tool = await getPublicTool(slug);
   if (!tool) return {};
   return {
-    title: `${tool.name}: Features, Pricing, Pros & Cons`,
-    description: `Explore ${tool.name} features, pricing, pros, cons and key use cases to understand whether it fits your business, team or workflow.`,
+    title: tool.seoTitle || `${tool.name}: Features, Pricing, Pros & Cons`,
+    description: tool.seoDescription || `Explore ${tool.name} features, pricing, pros, cons and key use cases to understand whether it fits your business, team or workflow.`,
     alternates: { canonical: `/tools/${tool.slug}/` },
     openGraph: { title: `${tool.name}: Features, Pricing, Pros & Cons`, description: tool.summary, url: `/tools/${tool.slug}/`, type: 'article' }
   };
@@ -48,17 +48,22 @@ export async function generateMetadata({ params }) {
 
 export default async function ToolPage({ params }) {
   const { slug } = await params;
-  const tool = getTool(slug);
+  const tool = await getPublicTool(slug);
   if (!tool) notFound();
   const category = getCategory(tool.primaryCategoryId);
+  if (!category) notFound();
   const pricingType = getPricingType(tool.pricing);
   const vendorLinkRel = getVendorLinkRel(tool);
   const toolPageUrl = absoluteUrl(`/tools/${tool.slug}/`);
   const toolSubcategories = tool.subcategoryIds.map(getSubcategory).filter(Boolean);
   const otherCategories = mainCategories.filter((item) => item.id !== category.id);
   const details = tool.details;
-  const relatedTools = getToolsByCategory(tool.primaryCategoryId)
-    .filter((candidate) => candidate.slug !== tool.slug)
+  const structuredPros = tool.pros || [];
+  const structuredCons = tool.cons || [];
+  const structuredUseCases = tool.useCases || [];
+  const structuredFaqs = tool.faqs || [];
+  const heroImage = tool.websiteImageUrl || details?.heroImage;
+  const relatedTools = (await getPublicRelatedTools(tool.slug, tool.primaryCategoryId))
     .map((candidate) => ({
       ...candidate,
       sharedSubcategories: candidate.subcategoryIds
@@ -66,7 +71,6 @@ export default async function ToolPage({ params }) {
         .map(getSubcategory)
         .filter(Boolean)
     }))
-    .filter((candidate) => candidate.sharedSubcategories.length > 0)
     .sort((a, b) => b.sharedSubcategories.length - a.sharedSubcategories.length || a.name.localeCompare(b.name))
     .slice(0, 4);
   const toolSchema = {
@@ -84,7 +88,21 @@ export default async function ToolPage({ params }) {
           { '@type': 'ListItem', position: 2, name: category.name, item: absoluteUrl(`/categories/${category.slug}/`) },
           { '@type': 'ListItem', position: 3, name: tool.name, item: toolPageUrl }
         ]
-      }
+      },
+      ...(structuredFaqs.length > 0 ? [{
+        '@type': 'FAQPage',
+        '@id': `${toolPageUrl}#faqs`,
+        url: `${toolPageUrl}#faqs`,
+        name: `${tool.name} frequently asked questions`,
+        mainEntity: structuredFaqs.map((faq) => ({
+          '@type': 'Question',
+          name: faq.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: faq.answer
+          }
+        }))
+      }] : [])
     ]
   };
 
@@ -99,11 +117,11 @@ export default async function ToolPage({ params }) {
           <div className={`${ui.shell} ${styles.profileCard}`}>
             <div className={styles.profileHeader}>
               <div className={styles.profileIdentity}>
-                <div className={`${styles.detailLogo} ${styles[`accent${category.accent[0].toUpperCase()}${category.accent.slice(1)}`]}`}>{tool.initials}</div>
+                <div className={`${styles.detailLogo} ${styles[`accent${category.accent[0].toUpperCase()}${category.accent.slice(1)}`]}`}>{tool.logoUrl ? <img src={tool.logoUrl} alt="" /> : tool.initials}</div>
                 <div className={styles.detailTitle}>
                   <h1>{tool.name} <span className={styles.verifiedMark} title="Information checked by the AgencyToolGuide editorial team" aria-label="Editorially checked profile"><VerifiedIcon /></span></h1>
                   <div className={styles.titleBadges}>
-                    <span className={`${styles.pricingType} ${styles[`pricing${pricingType}`]}`}>{pricingType}</span>
+                    <span className={`${styles.pricingType} ${styles[`pricing${pricingType}`]}`}>{tool.pricing}</span>
                     {tool.sponsored && <span className={styles.sponsoredDisclosure}>Sponsored listing</span>}
                   </div>
                 </div>
@@ -119,14 +137,14 @@ export default async function ToolPage({ params }) {
             <div className={styles.profileBody}>
               <div className={styles.mediaColumn}>
                 <a className={styles.heroMedia} href={tool.website} target="_blank" rel={vendorLinkRel} aria-label={`Visit the official ${tool.name} website`}>
-                  {details?.heroImage ? (
-                    <img className={styles.heroImage} src={details.heroImage} alt={details.heroImageAlt || `${tool.name} product preview`} />
+                  {heroImage ? (
+                    <img className={styles.heroImage} src={heroImage} alt={details?.heroImageAlt || `${tool.name} product preview`} />
                   ) : (
                     <>
                       <span className={styles.mediaEyebrow}>Featured tool</span>
                       <span className={styles.mediaMark}>{tool.initials}</span>
                       <strong>{tool.name}</strong>
-                      <p>{tool.highlights.join(' • ')}</p>
+                      <p>{tool.highlights.length ? tool.highlights.join(' • ') : tool.summary}</p>
                     </>
                   )}
                   <span className={styles.mediaOverlay}>Visit Website <ExternalIcon /></span>
@@ -141,8 +159,8 @@ export default async function ToolPage({ params }) {
               </div>
 
               <div className={styles.profileSummary}>
-                <div className={styles.summaryQuote}><p>{details?.introduction || tool.summary}</p></div>
-                <p className={styles.bestFor}><strong>Best for:</strong> {tool.bestFor}</p>
+                <div className={styles.summaryQuote}><p>{tool.summary}</p></div>
+                {tool.bestFor && <p className={styles.bestFor}><strong>Best for:</strong> {tool.bestFor}</p>}
                 {tool.socialLinks?.length > 0 && (
                   <div className={styles.socialRow}>
                     <span>Social &amp; email</span>
@@ -161,24 +179,29 @@ export default async function ToolPage({ params }) {
         <section className={styles.detailContent}>
           <div className={`${ui.shell} ${styles.detailGrid}`}>
             <article className={styles.detailMain}>
-              {details ? (
-                <div className={styles.contentArticle}>
-                  <section id="what-is" className={styles.contentSection}><h2>What is {tool.name}?</h2><p>{details.introduction}</p></section>
-                  <section id="who-should-use" className={styles.contentSection}><h2>Who should use {tool.name}?</h2><p>{details.audience}</p></section>
-                  <section id="features" className={styles.contentSection}>
-                    <h2>Key features of {tool.name}</h2>
-                    <div className={styles.featureList}>{details.features.map((feature) => <div key={feature.name}><h3>{feature.name}</h3><p>{feature.description}</p></div>)}</div>
-                  </section>
-                  <section id="how-it-works" className={styles.contentSection}><h2>How does {tool.name} work?</h2><ol className={styles.stepList}>{details.workflow.map((step) => <li key={step}>{step}</li>)}</ol></section>
-                  <section id="pricing" className={styles.contentSection}><h2>{tool.name} pricing and plans</h2><p>{details.pricingSummary}</p><p className={styles.verified}>Pricing information checked: {details.pricingVerified}</p></section>
-                  <section id="pros-cons" className={styles.contentSection}>
-                    <h2>{tool.name} pros and cons</h2>
-                    <div className={styles.proConGrid}><div className={styles.proBox}><h3>Pros</h3><ul>{details.pros.map((item) => <li key={item}>{item}</li>)}</ul></div><div className={styles.conBox}><h3>Cons</h3><ul>{details.cons.map((item) => <li key={item}>{item}</li>)}</ul></div></div>
-                  </section>
-                  <section id="use-cases" className={styles.contentSection}><h2>Popular {tool.name} use cases</h2><div className={styles.useCaseGrid}>{details.useCases.map((item) => <div key={item.name}><h3>{item.name}</h3><p>{item.description}</p></div>)}</div></section>
-                  <section id="conclusion" className={styles.contentSection}><h2>Conclusion</h2><p>{details.editorialSummary}</p></section>
-                  <section id="faqs" className={styles.contentSection}><h2>Frequently asked questions</h2><div className={styles.faqList}>{details.faqs.map((faq) => <div key={faq.question}><h3>{faq.question}</h3><p>{faq.answer}</p></div>)}</div></section>
-                </div>
+              {tool.contentMarkdown ? (
+                <>
+                  <div className={styles.contentArticle}>
+                    <MarkdownContent content={tool.contentMarkdown} className={styles.markdownContent} />
+                  </div>
+                  {(structuredPros.length > 0 || structuredCons.length > 0) && <section id="pros-cons" className={styles.proConStandalone}><div className={styles.proConGrid}>{structuredPros.length > 0 && <div className={styles.proBox}><h3>Pros</h3><ul>{structuredPros.map((item, index) => <li key={`${item}-${index}`}>{item}</li>)}</ul></div>}{structuredCons.length > 0 && <div className={styles.conBox}><h3>Cons</h3><ul>{structuredCons.map((item, index) => <li key={`${item}-${index}`}>{item}</li>)}</ul></div>}</div></section>}
+                  {structuredUseCases.length > 0 && <div className={styles.contentArticle}><section id="use-cases" className={styles.contentSection}><h2>Popular {tool.name} use cases</h2><div className={styles.useCaseGrid}>{structuredUseCases.map((item, index) => <div key={`${item.title}-${index}`}><h3>{item.title}</h3><p>{item.description}</p></div>)}</div></section></div>}
+                  {structuredFaqs.length > 0 && <div className={styles.contentArticle}><section id="faqs" className={styles.contentSection}><h2>Frequently asked questions</h2><div className={styles.faqList}>{structuredFaqs.map((faq, index) => <div key={`${faq.question}-${index}`}><h3>{faq.question}</h3><p>{faq.answer}</p></div>)}</div></section></div>}
+                </>
+              ) : details ? (
+                <>
+                  <div className={styles.contentArticle}>
+                    <section id="what-is" className={styles.contentSection}><h2>What is {tool.name}?</h2><p>{details.introduction}</p></section>
+                    <section id="who-should-use" className={styles.contentSection}><h2>Who should use {tool.name}?</h2><p>{details.audience}</p></section>
+                    <section id="how-it-works" className={styles.contentSection}><h2>How does {tool.name} work?</h2><ol className={styles.stepList}>{details.workflow.map((step) => <li key={step}>{step}</li>)}</ol></section>
+                    <section id="pricing" className={styles.contentSection}><h2>{tool.name} pricing and plans</h2><p>{details.pricingSummary}</p><p className={styles.verified}>Pricing information checked: {details.pricingVerified}</p></section>
+                    {details.features?.length > 0 && <section id="features" className={styles.contentSection}><h2>Key features of {tool.name}</h2><div className={styles.featureList}>{details.features.map((feature) => <div key={feature.name}><h3>{feature.name}</h3><p>{feature.description}</p></div>)}</div></section>}
+                    {details.editorialSummary && <section id="conclusion" className={styles.contentSection}><h2>Conclusion</h2><p>{details.editorialSummary}</p></section>}
+                  </div>
+                  {(details.pros?.length > 0 || details.cons?.length > 0) && <section id="pros-cons" className={styles.proConStandalone}><div className={styles.proConGrid}><div className={styles.proBox}><h3>Pros</h3><ul>{details.pros.map((item) => <li key={item}>{item}</li>)}</ul></div><div className={styles.conBox}><h3>Cons</h3><ul>{details.cons.map((item) => <li key={item}>{item}</li>)}</ul></div></div></section>}
+                  {details.useCases?.length > 0 && <div className={styles.contentArticle}><section id="use-cases" className={styles.contentSection}><h2>Popular {tool.name} use cases</h2><div className={styles.useCaseGrid}>{details.useCases.map((item) => <div key={item.name}><h3>{item.name}</h3><p>{item.description}</p></div>)}</div></section></div>}
+                  {details.faqs?.length > 0 && <div className={styles.contentArticle}><section id="faqs" className={styles.contentSection}><h2>Frequently asked questions</h2><div className={styles.faqList}>{details.faqs.map((faq) => <div key={faq.question}><h3>{faq.question}</h3><p>{faq.answer}</p></div>)}</div></section></div>}
+                </>
               ) : (
                 <div className={styles.contentArticle}>
                   <section className={styles.contentSection}><h2>Who it may suit</h2><p>{tool.bestFor}</p></section>

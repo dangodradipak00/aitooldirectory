@@ -6,7 +6,13 @@ import { blogPosts } from '@/lib/db/schema';
 import styles from '../admin.module.css';
 
 export default async function AdminBlogsPage() {
-  const posts = await getDb().select().from(blogPosts).orderBy(desc(blogPosts.updatedAt));
+  const posts = await getDb().select({
+    id: blogPosts.id,
+    title: blogPosts.title,
+    slug: blogPosts.slug,
+    status: blogPosts.status,
+    updatedAt: blogPosts.updatedAt
+  }).from(blogPosts).orderBy(desc(blogPosts.updatedAt));
   return (
     <>
       <header className={styles.pageHeader}><div><p>Editorial</p><h1>Blog studio</h1><span>Draft, optimize and publish articles from one workspace.</span></div></header>

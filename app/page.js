@@ -27,11 +27,9 @@ const featuredAiTools = [
   { name: 'DeepSeek', website: 'https://chat.deepseek.com/', href: 'https://chat.deepseek.com/', external: true }
 ];
 
-const hiddenTickerSlugs = new Set(['agencyanalytics', 'dashthis', 'looker-studio', 'callrail', 'whatconverts']);
 const tickerTools = [
   ...featuredAiTools,
   ...publishedTools
-    .filter((tool) => !hiddenTickerSlugs.has(tool.slug))
     .map((tool) => ({ ...tool, href: `/tools/${tool.slug}/`, external: false }))
 ];
 
