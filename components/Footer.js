@@ -1,9 +1,12 @@
 import Link from 'next/link';
-import { getCategory, homepageCategoryIds } from '../data/categories';
+import { homepageCategoryIds } from '../data/categories';
+import { getPublicCategories } from '../lib/public-categories';
 import styles from './Footer.module.css';
 
-export default function Footer() {
-  const categories = homepageCategoryIds.slice(0, 10).map(getCategory).filter(Boolean);
+export default async function Footer() {
+  const publicCategories = await getPublicCategories();
+  const categoriesById = new Map(publicCategories.map((category) => [category.id, category]));
+  const categories = homepageCategoryIds.slice(0, 10).map((id) => categoriesById.get(id)).filter(Boolean);
   return (
     <footer className={styles.siteFooter}>
       <div className={`${styles.shell} ${styles.footerCtaWrap}`}>
@@ -40,6 +43,7 @@ export default function Footer() {
           <ul>
             <li><Link href="/#directory">Find tools</Link></li>
             <li><Link href="/categories/">All categories</Link></li>
+            <li><Link href="/blog/">Blog</Link></li>
             <li><Link href="/submit/">Submit a tool</Link></li>
             <li><Link href="/editorial-policy/">Editorial approach</Link></li>
             <li><Link href="/#guides">Buying guides</Link></li>

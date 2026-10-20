@@ -5,8 +5,9 @@ import JsonLd from '../components/JsonLd';
 import HomepageCategories from '../components/HomepageCategories';
 import { ArrowIcon } from '../components/Icons';
 import { GridPulse } from '../components/ui/grid-pulse';
-import { getCategory, homepageCategoryIds } from '../data/categories';
+import { homepageCategoryIds } from '../data/categories';
 import { getToolsByCategory, publishedTools } from '../data/tools';
+import { getPublicCategories } from '../lib/public-categories';
 import styles from './page.module.css';
 import ui from '../styles/ui.module.css';
 import { absoluteUrl, siteName } from '../lib/site';
@@ -33,9 +34,13 @@ const tickerTools = [
     .map((tool) => ({ ...tool, href: `/tools/${tool.slug}/`, external: false }))
 ];
 
-export default function HomePage() {
-  const homepageCategories = homepageCategoryIds.map((categoryId) => ({
-    category: getCategory(categoryId),
+export const dynamic = 'force-dynamic';
+
+export default async function HomePage() {
+  const publicCategories = await getPublicCategories();
+  const categoriesById = new Map(publicCategories.map((category) => [category.id, category]));
+  const homepageCategories = homepageCategoryIds.filter((categoryId) => categoriesById.has(categoryId)).map((categoryId) => ({
+    category: categoriesById.get(categoryId),
     tools: getToolsByCategory(categoryId)
   }));
   const homeSchema = {

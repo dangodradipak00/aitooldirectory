@@ -14,7 +14,7 @@ const category = ({
   description,
   subcategories,
   searchSynonyms = [],
-  publicVisible = false,
+  publicVisible = true,
   selectedOnHomepage = false,
   accent = 'blue'
 }) => ({

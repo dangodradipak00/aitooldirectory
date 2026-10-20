@@ -6,9 +6,8 @@ import JsonLd from '../../../components/JsonLd';
 import { ExternalIcon, VerifiedIcon } from '../../../components/Icons';
 import EmbedBadge from './EmbedBadge';
 import ShareButton from './ShareButton';
-import { getCategory, getSubcategory, mainCategories } from '../../../data/categories';
-import { publishedTools } from '../../../data/tools';
-import { getVendorLinkRel } from '../../../lib/link-utils';
+import { getVendorLinkRel, getVendorTrackingUrl } from '../../../lib/link-utils';
+import { getPublicCategories } from '../../../lib/public-categories';
 import { getPublicRelatedTools, getPublicTool } from '../../../lib/public-tools';
 import { absoluteUrl, editorialTeamName } from '../../../lib/site';
 import MarkdownContent from '../../../components/MarkdownContent';
@@ -30,9 +29,7 @@ function getPricingType(pricing) {
   return 'Premium';
 }
 
-export function generateStaticParams() {
-  return publishedTools.map((tool) => ({ slug: tool.slug }));
-}
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -50,13 +47,17 @@ export default async function ToolPage({ params }) {
   const { slug } = await params;
   const tool = await getPublicTool(slug);
   if (!tool) notFound();
-  const category = getCategory(tool.primaryCategoryId);
+  const publicCategories = await getPublicCategories();
+  const category = publicCategories.find((item) => item.id === tool.primaryCategoryId)
+    || publicCategories.find((item) => tool.secondaryCategoryIds.includes(item.id));
   if (!category) notFound();
+  const publicSubcategories = new Map(publicCategories.flatMap((item) => item.subcategories).map((item) => [item.id, item]));
   const pricingType = getPricingType(tool.pricing);
   const vendorLinkRel = getVendorLinkRel(tool);
+  const vendorUrl = getVendorTrackingUrl(tool);
   const toolPageUrl = absoluteUrl(`/tools/${tool.slug}/`);
-  const toolSubcategories = tool.subcategoryIds.map(getSubcategory).filter(Boolean);
-  const otherCategories = mainCategories.filter((item) => item.id !== category.id);
+  const toolSubcategories = tool.subcategoryIds.map((id) => publicSubcategories.get(id)).filter(Boolean);
+  const otherCategories = publicCategories.filter((item) => item.id !== category.id);
   const details = tool.details;
   const structuredPros = tool.pros || [];
   const structuredCons = tool.cons || [];
@@ -68,7 +69,7 @@ export default async function ToolPage({ params }) {
       ...candidate,
       sharedSubcategories: candidate.subcategoryIds
         .filter((subcategoryId) => tool.subcategoryIds.includes(subcategoryId))
-        .map(getSubcategory)
+        .map((id) => publicSubcategories.get(id))
         .filter(Boolean)
     }))
     .sort((a, b) => b.sharedSubcategories.length - a.sharedSubcategories.length || a.name.localeCompare(b.name))
@@ -128,7 +129,7 @@ export default async function ToolPage({ params }) {
               </div>
               <div className={styles.profileActions}>
                 <ShareButton title={`Explore ${tool.name} on AgencyToolGuide`} />
-                <a className={styles.siteButton} href={tool.website} target="_blank" rel={vendorLinkRel}><ExternalIcon /> Visit this site</a>
+                <a className={styles.siteButton} href={vendorUrl} target="_blank" rel={vendorLinkRel}><ExternalIcon /> Visit this site</a>
               </div>
             </div>
 
@@ -136,7 +137,7 @@ export default async function ToolPage({ params }) {
 
             <div className={styles.profileBody}>
               <div className={styles.mediaColumn}>
-                <a className={styles.heroMedia} href={tool.website} target="_blank" rel={vendorLinkRel} aria-label={`Visit the official ${tool.name} website`}>
+                <a className={styles.heroMedia} href={vendorUrl} target="_blank" rel={vendorLinkRel} aria-label={`Visit the official ${tool.name} website`}>
                   {heroImage ? (
                     <img className={styles.heroImage} src={heroImage} alt={details?.heroImageAlt || `${tool.name} product preview`} />
                   ) : (

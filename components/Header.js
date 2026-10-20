@@ -45,6 +45,7 @@ export default function Header({ heroContrast = false }) {
           <nav className={styles.desktopNav} aria-label="Main navigation">
             <Link href="/">Browse tools</Link>
             <Link href="/categories/">Categories</Link>
+            <Link href="/blog/">Blog</Link>
             <Link href="/about/">About</Link>
             <Link href="/contact/">Contact</Link>
           </nav>
@@ -68,6 +69,7 @@ export default function Header({ heroContrast = false }) {
           <nav id="mobile-navigation" className={styles.mobileMenu} aria-label="Mobile navigation">
             <Link href="/" onClick={() => setMenuOpen(false)}>Browse tools</Link>
             <Link href="/categories/" onClick={() => setMenuOpen(false)}>Categories</Link>
+            <Link href="/blog/" onClick={() => setMenuOpen(false)}>Blog</Link>
             <Link href="/about/" onClick={() => setMenuOpen(false)}>About</Link>
             <Link href="/contact/" onClick={() => setMenuOpen(false)}>Contact</Link>
           </nav>

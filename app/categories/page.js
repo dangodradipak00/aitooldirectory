@@ -1,9 +1,10 @@
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import CategoryBrowser from '../../components/CategoryBrowser';
-import { getCategorySearchText, mainCategories } from '../../data/categories';
+import { getCategorySearchText } from '../../data/categories';
 import { getCategoryToolCount } from '../../data/tools';
 import { getSubcategoryToolCount } from '../../lib/category-utils';
+import { getPublicCategories } from '../../lib/public-categories';
 import styles from './page.module.css';
 import ui from '../../styles/ui.module.css';
 
@@ -14,8 +15,11 @@ export const metadata = {
   openGraph: { title: 'AI Tool Categories', description: 'Browse AI software categories and find tools by workflow.', url: '/categories/' }
 };
 
-export default function CategoriesPage() {
-  const categories = mainCategories.map((category, index) => ({
+export const dynamic = 'force-dynamic';
+
+export default async function CategoriesPage() {
+  const publicCategories = await getPublicCategories();
+  const categories = publicCategories.map((category, index) => ({
     ...category,
     order: index + 1,
     count: getCategoryToolCount(category.id),

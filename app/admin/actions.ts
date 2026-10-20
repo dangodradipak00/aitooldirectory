@@ -370,13 +370,42 @@ export async function createBlog(_state: FormState, formData: FormData): Promise
       publishedAt: values.status === 'published' ? new Date() : null
     });
     revalidatePath('/admin/blogs/');
+    revalidatePath('/blog/');
+    revalidatePath('/blog/[slug]', 'page');
+    revalidatePath('/blog-sitemap.xml');
     return { success: 'Blog post saved.' };
   } catch (error) {
     return { error: message(error) };
   }
 }
 
+function revalidateTaxonomyPages() {
+  revalidatePath('/');
+  revalidatePath('/categories/');
+  revalidatePath('/categories/[slug]', 'page');
+  revalidatePath('/category-sitemap.xml');
+  revalidatePath('/submit/');
+}
+
 export async function createCategory(_state: FormState, formData: FormData): Promise<FormState> {
+  try {
+    await assertAdmin();
+    const values = z.object({
+      id: slug.optional(),
+      slug,
+      name: z.string().trim().min(2).max(100),
+      description: z.string().trim().min(10).max(300)
+    }).parse({ id: text(formData, 'id') || undefined, slug: text(formData, 'slug'), name: text(formData, 'name'), description: text(formData, 'description') });
+    await getDb().insert(categories).values({ ...values, id: values.id || values.slug });
+    revalidatePath('/admin/categories/');
+    revalidateTaxonomyPages();
+    return { success: 'Category saved.' };
+  } catch (error) {
+    return { error: message(error) };
+  }
+}
+
+export async function updateCategory(_state: FormState, formData: FormData): Promise<FormState> {
   try {
     await assertAdmin();
     const values = z.object({
@@ -385,12 +414,33 @@ export async function createCategory(_state: FormState, formData: FormData): Pro
       name: z.string().trim().min(2).max(100),
       description: z.string().trim().min(10).max(300)
     }).parse({ id: text(formData, 'id'), slug: text(formData, 'slug'), name: text(formData, 'name'), description: text(formData, 'description') });
-    await getDb().insert(categories).values(values);
+    await getDb().update(categories).set({
+      name: values.name,
+      slug: values.slug,
+      description: values.description,
+      updatedAt: new Date()
+    }).where(eq(categories.id, values.id));
     revalidatePath('/admin/categories/');
-    return { success: 'Category saved.' };
+    revalidatePath('/admin/subcategories/');
+    revalidateTaxonomyPages();
+    return { success: 'Category updated.' };
   } catch (error) {
     return { error: message(error) };
   }
+}
+
+export async function setCategoryVisibility(formData: FormData) {
+  await assertAdmin();
+  const values = z.object({ id: slug, publicVisible: z.enum(['true', 'false']) }).parse({
+    id: text(formData, 'id'), publicVisible: text(formData, 'publicVisible')
+  });
+  await getDb().update(categories).set({
+    publicVisible: values.publicVisible === 'true',
+    updatedAt: new Date()
+  }).where(eq(categories.id, values.id));
+  revalidatePath('/admin/categories/');
+  revalidatePath('/admin/subcategories/');
+  revalidateTaxonomyPages();
 }
 
 export async function createSubcategory(_state: FormState, formData: FormData): Promise<FormState> {
@@ -412,10 +462,55 @@ export async function createSubcategory(_state: FormState, formData: FormData): 
       id: `${values.parentCategoryId}.${values.slug}`
     });
     revalidatePath('/admin/subcategories/');
+    revalidateTaxonomyPages();
     return { success: 'Sub category saved.' };
   } catch (error) {
     return { error: message(error) };
   }
+}
+
+export async function updateSubcategory(_state: FormState, formData: FormData): Promise<FormState> {
+  try {
+    await assertAdmin();
+    const values = z.object({
+      id: z.string().trim().min(3).max(205),
+      parentCategoryId: slug,
+      slug,
+      name: z.string().trim().min(2).max(100),
+      description: z.string().trim().min(10).max(300)
+    }).parse({
+      id: text(formData, 'id'),
+      parentCategoryId: text(formData, 'parentCategoryId'),
+      slug: text(formData, 'slug'),
+      name: text(formData, 'name'),
+      description: text(formData, 'description')
+    });
+    await getDb().update(subcategories).set({
+      parentCategoryId: values.parentCategoryId,
+      slug: values.slug,
+      name: values.name,
+      description: values.description,
+      updatedAt: new Date()
+    }).where(eq(subcategories.id, values.id));
+    revalidatePath('/admin/subcategories/');
+    revalidateTaxonomyPages();
+    return { success: 'Sub category updated.' };
+  } catch (error) {
+    return { error: message(error) };
+  }
+}
+
+export async function setSubcategoryVisibility(formData: FormData) {
+  await assertAdmin();
+  const values = z.object({ id: z.string().trim().min(3).max(205), publicVisible: z.enum(['true', 'false']) }).parse({
+    id: text(formData, 'id'), publicVisible: text(formData, 'publicVisible')
+  });
+  await getDb().update(subcategories).set({
+    publicVisible: values.publicVisible === 'true',
+    updatedAt: new Date()
+  }).where(eq(subcategories.id, values.id));
+  revalidatePath('/admin/subcategories/');
+  revalidateTaxonomyPages();
 }
 
 export async function setToolStatus(formData: FormData) {
@@ -459,6 +554,9 @@ export async function setBlogStatus(formData: FormData) {
     publishedAt: values.status === 'published' ? new Date() : null
   }).where(eq(blogPosts.id, values.id));
   revalidatePath('/admin/blogs/');
+  revalidatePath('/blog/');
+  revalidatePath('/blog/[slug]', 'page');
+  revalidatePath('/blog-sitemap.xml');
 }
 
 export async function reviewSubmission(formData: FormData) {

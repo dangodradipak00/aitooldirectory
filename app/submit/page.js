@@ -1,8 +1,7 @@
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import ToolSubmissionForm from '../../components/ToolSubmissionForm';
-import { getDb } from '../../lib/db';
-import { categories as categoriesTable, subcategories as subcategoriesTable } from '../../lib/db/schema';
+import { getPublicCategories } from '../../lib/public-categories';
 import styles from './page.module.css';
 import ui from '../../styles/ui.module.css';
 
@@ -15,15 +14,10 @@ export const metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function SubmitPage() {
-  const db = getDb();
-  const [categoryRows, subcategoryRows] = await Promise.all([
-    db.select().from(categoriesTable).orderBy(categoriesTable.name),
-    db.select().from(subcategoriesTable).orderBy(subcategoriesTable.name)
-  ]);
-  const categories = categoryRows.map((category) => {
-    const subcategories = subcategoryRows.filter((item) => item.parentCategoryId === category.id);
-    return { ...category, subcategories, searchText: `${category.name} ${category.description} ${subcategories.map((item) => item.name).join(' ')}`.toLowerCase() };
-  });
+  const categories = (await getPublicCategories()).map((category) => ({
+    ...category,
+    searchText: `${category.name} ${category.description} ${category.subcategories.map((item) => item.name).join(' ')}`.toLowerCase()
+  }));
   return (
     <>
       <Header />
