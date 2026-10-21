@@ -3,8 +3,9 @@ import { getStoredObject } from '@/lib/storage/neon';
 export async function GET(_request: Request, context: { params: Promise<{ key: string[] }> }) {
   try {
     const { key: segments } = await context.params;
+    if (segments.some((segment) => !segment || segment === '.' || segment === '..')) return new Response('Not found', { status: 404 });
     const key = segments.join('/');
-    if (!key.startsWith('tools/')) return new Response('Not found', { status: 404 });
+    if (!key.startsWith('tools/') && !key.startsWith('blogs/')) return new Response('Not found', { status: 404 });
 
     const stored = await getStoredObject(key);
     if (stored.status === 404) return new Response('Not found', { status: 404 });

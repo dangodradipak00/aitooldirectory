@@ -5,8 +5,8 @@ import Footer from '../../../components/Footer';
 import CategoryDirectory from '../../../components/CategoryDirectory';
 import { ArrowIcon } from '../../../components/Icons';
 import { categoryAliases } from '../../../data/categories';
-import { getToolsByCategory } from '../../../data/tools';
 import { resolvePublicCategorySlug } from '../../../lib/public-categories';
+import { getPublicToolsByCategory } from '../../../lib/public-tools';
 import styles from './page.module.css';
 import ui from '../../../styles/ui.module.css';
 
@@ -29,7 +29,7 @@ export default async function CategoryPage({ params }) {
   const { slug } = await params;
   const { category, isLegacy } = await resolvePublicCategorySlug(slug, categoryAliases);
   if (!category) notFound();
-  const categoryTools = getToolsByCategory(category.id);
+  const categoryTools = await getPublicToolsByCategory(category.id);
 
   return (
     <>

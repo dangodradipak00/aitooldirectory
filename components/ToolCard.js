@@ -9,7 +9,9 @@ export default function ToolCard({ tool, saved = false, onSave }) {
   return (
     <article className={styles.toolCard}>
       <div className={styles.toolCardTop}>
-        <div className={`${styles.toolLogo} ${styles[`accent${category.accent[0].toUpperCase()}${category.accent.slice(1)}`]}`}>{tool.initials}</div>
+        <div className={`${styles.toolLogo} ${styles[`accent${category.accent[0].toUpperCase()}${category.accent.slice(1)}`]}`}>
+          {tool.logoUrl ? <img src={tool.logoUrl} alt={`${tool.name} logo`} /> : tool.initials}
+        </div>
         <div className={styles.toolTitleWrap}>
           <h3><Link href={`/tools/${tool.slug}/`}>{tool.name}</Link></h3>
           <Link href={`/categories/${category.slug}/`} className={styles.toolCategory}>{category.name}</Link>

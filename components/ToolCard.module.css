@@ -2,6 +2,7 @@
 .toolCard:hover { border-color: #c1d8eb; box-shadow: var(--shadow-md); transform: translateY(-2px); }
 .toolCardTop { display: flex; align-items: center; gap: 12px; }
 .toolLogo { width: 46px; height: 46px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 12px; background: var(--sky); color: var(--blue); font-size: .82rem; font-weight: 900; }
+.toolLogo img { width: 100%; height: 100%; display: block; border-radius: inherit; object-fit: contain; }
 .accentViolet { color: var(--violet); background: #f0edff; }
 .accentOrange { color: var(--orange); background: #fff1e7; }
 .accentBlue { color: var(--blue); background: var(--sky); }

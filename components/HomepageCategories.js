@@ -27,7 +27,9 @@ export default function HomepageCategories({ categories }) {
                   {tools.slice(0, 10).map((tool) => (
                     <li key={tool.slug}>
                       <Link href={`/tools/${tool.slug}/`}>
-                        <span className={styles.logo} aria-hidden="true">{tool.initials}</span>
+                        <span className={styles.logo} aria-hidden="true">
+                          {tool.logoUrl ? <img src={tool.logoUrl} alt="" /> : tool.initials}
+                        </span>
                         <span>{tool.name}</span>
                         <span className={styles.rowArrow} aria-hidden="true">↗</span>
                       </Link>

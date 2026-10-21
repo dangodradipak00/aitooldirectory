@@ -2,16 +2,14 @@ import { cache } from 'react';
 import { and, desc, eq } from 'drizzle-orm';
 import { getDb } from '@/lib/db';
 import { blogPosts } from '@/lib/db/schema';
-import { dummyBlogs } from '@/data/dummy-blogs';
 
 export const getPublishedBlogs = cache(async () => {
   try {
-    const posts = await getDb().select().from(blogPosts)
+    return await getDb().select().from(blogPosts)
       .where(eq(blogPosts.status, 'published'))
       .orderBy(desc(blogPosts.publishedAt), desc(blogPosts.createdAt));
-    return posts.length > 0 ? posts : dummyBlogs;
   } catch {
-    return dummyBlogs;
+    return [];
   }
 });
 
@@ -20,8 +18,8 @@ export const getPublishedBlog = cache(async (slug: string) => {
     const [post] = await getDb().select().from(blogPosts)
       .where(and(eq(blogPosts.slug, slug), eq(blogPosts.status, 'published')))
       .limit(1);
-    return post || dummyBlogs.find((item) => item.slug === slug) || null;
+    return post || null;
   } catch {
-    return dummyBlogs.find((item) => item.slug === slug) || null;
+    return null;
   }
 });

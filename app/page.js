@@ -6,8 +6,9 @@ import HomepageCategories from '../components/HomepageCategories';
 import { ArrowIcon } from '../components/Icons';
 import { GridPulse } from '../components/ui/grid-pulse';
 import { homepageCategoryIds } from '../data/categories';
-import { getToolsByCategory, publishedTools } from '../data/tools';
+import { publishedTools } from '../data/tools';
 import { getPublicCategories } from '../lib/public-categories';
+import { getPublicTools } from '../lib/public-tools';
 import styles from './page.module.css';
 import ui from '../styles/ui.module.css';
 import { absoluteUrl, siteName } from '../lib/site';
@@ -37,11 +38,11 @@ const tickerTools = [
 export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
-  const publicCategories = await getPublicCategories();
+  const [publicCategories, publicTools] = await Promise.all([getPublicCategories(), getPublicTools()]);
   const categoriesById = new Map(publicCategories.map((category) => [category.id, category]));
   const homepageCategories = homepageCategoryIds.filter((categoryId) => categoriesById.has(categoryId)).map((categoryId) => ({
     category: categoriesById.get(categoryId),
-    tools: getToolsByCategory(categoryId)
+    tools: publicTools.filter((tool) => tool.primaryCategoryId === categoryId || tool.secondaryCategoryIds.includes(categoryId))
   }));
   const homeSchema = {
     '@context': 'https://schema.org',

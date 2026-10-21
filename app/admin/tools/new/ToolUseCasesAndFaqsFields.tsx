@@ -5,7 +5,7 @@ import styles from '../../admin.module.css';
 
 type PairRow = { id: number; first: string; second: string };
 
-function PairEditor({
+export function PairEditor({
   title,
   addLabel,
   firstName,

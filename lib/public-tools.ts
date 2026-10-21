@@ -1,6 +1,6 @@
 import { cache } from 'react';
 import { eq } from 'drizzle-orm';
-import { getTool as getStaticTool, getToolsByCategory as getStaticToolsByCategory } from '@/data/tools';
+import { getTool as getStaticTool, getToolsByCategory as getStaticToolsByCategory, publishedTools } from '@/data/tools';
 import { getDb } from '@/lib/db';
 import { tools } from '@/lib/db/schema';
 
@@ -39,6 +39,23 @@ export const getPublicTool = cache(async (slug: string) => {
   }
   return getStaticTool(slug) || null;
 });
+
+export const getPublicTools = cache(async () => {
+  try {
+    const rows = await getDb().select().from(tools).where(eq(tools.status, 'published'));
+    return rows.map(publicTool);
+  } catch {
+    // Keep the public directory usable while Neon is sleeping or unavailable.
+    return publishedTools;
+  }
+});
+
+export async function getPublicToolsByCategory(categoryId: string) {
+  const rows = await getPublicTools();
+  return rows.filter((tool) =>
+    tool.primaryCategoryId === categoryId || (tool.secondaryCategoryIds as string[]).includes(categoryId),
+  );
+}
 
 export async function getPublicRelatedTools(currentSlug: string, primaryCategoryId: string) {
   try {

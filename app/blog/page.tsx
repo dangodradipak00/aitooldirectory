@@ -32,7 +32,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const query = (Array.isArray(rawQuery) ? rawQuery[0] : rawQuery || '').trim();
   const normalizedQuery = query.toLowerCase();
   const visiblePosts = normalizedQuery
-    ? posts.filter((post) => `${post.title} ${post.excerpt}`.toLowerCase().includes(normalizedQuery))
+    ? posts.filter((post) => `${post.title} ${post.content}`.toLowerCase().includes(normalizedQuery))
     : posts;
 
   return <>
