@@ -1,13 +1,14 @@
-import InfoPage from '../../components/InfoPage';
+import InfoPage, { contactEmail } from '../../components/InfoPage';
+import { siteUrl } from '../../lib/site';
 
 export const metadata = { title: 'Cookie Policy', description: 'Learn how AgencyToolGuide uses cookies, local storage and similar technologies.', alternates: { canonical: '/cookie-policy/' } };
 
 export default function CookiePolicyPage() {
-  return <InfoPage eyebrow="Legal" title="Cookie Policy" intro="This page explains how cookies and similar browser technologies may be used on AgencyToolGuide and how visitors can control them.">
-    <section><h2>What these technologies are</h2><p>Cookies are small text files stored by a browser. Similar technologies include local storage, pixels and tags. AgencyToolGuide currently uses browser storage to remember preferences such as light or dark theme and may add consented analytics or advertising tools as the service develops.</p></section>
-    <section><h2>Types we may use</h2><ul><li><strong>Essential:</strong> security, navigation and preferences required for expected website behaviour.</li><li><strong>Analytics:</strong> aggregated information about traffic and feature usage.</li><li><strong>Advertising:</strong> measurement, frequency control and personalisation where permitted.</li><li><strong>Third-party:</strong> technologies used by embedded, payment or service providers.</li></ul></section>
-    <section><h2>Your choices</h2><p>You can block or delete storage through your browser. Where a consent banner is displayed, use it to accept, reject or change optional categories. Blocking essential storage may affect preferences or website functionality.</p></section>
-    <section><h2>Google services</h2><p>If Google Analytics, Google Ads or AdSense is enabled, Google and its partners may use cookies or identifiers for measurement and advertising. Available controls may include Google’s advertising settings and the consent choices shown on this website.</p></section>
-    <section><h2>Updates</h2><p>This policy will be updated when the technologies or providers used by AgencyToolGuide materially change.</p></section>
+  return <InfoPage eyebrow="Legal" title="Cookie Policy" effective="October 22, 2026">
+    <section><h2>1. What cookies are</h2><p>Cookies and similar browser storage are small pieces of data a website saves on your device so it can work properly and remember your choices.</p></section>
+    <section><h2>2. What we use</h2><p>At present, {siteUrl} uses only these:</p><table><thead><tr><th>Type</th><th>Purpose</th><th>Who it affects</th></tr></thead><tbody><tr><td>Strictly necessary</td><td>Admin login, session security, fraud and abuse prevention</td><td>Our administrators</td></tr><tr><td>Preference</td><td>Remembering your light or dark display mode</td><td>All visitors</td></tr></tbody></table></section>
+    <section><h2>3. What we do not use</h2><p>We do not currently use analytics cookies, advertising or marketing cookies, social media pixels or cross-site tracking. If we add any of these later, we will update this policy first and, where required, ask for your consent.</p></section>
+    <section><h2>4. Third-party cookies</h2><p>If you click an external link, such as a tool’s “Visit” button, the other site may set its own cookies under its own policy.</p></section>
+    <section><h2>5. Your choices</h2><p>You can block or delete cookies in your browser settings. Blocking necessary cookies may stop admin login from working, and clearing browser storage resets your display mode. Questions: <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.</p></section>
   </InfoPage>;
 }

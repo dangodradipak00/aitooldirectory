@@ -27,7 +27,7 @@ export default async function SubmitPage() {
           <div className={styles.offerNotice}>
             <div><span>Starting at $9</span><h2>What the submission fee covers</h2></div>
             <ul><li>Editorial review of supplied tool information</li><li>A directory profile if the tool is accepted</li><li>Clear sponsored disclosure when payment affects placement</li><li>No guaranteed positive coverage, traffic or search ranking</li></ul>
-            <p>No payment is collected through this form. Accepted requests receive the final deliverables and manual payment terms by email before work starts. Read the <a href="/refund-policy/">refund policy</a> and <a href="/advertising-disclosure/">advertising disclosure</a>.</p>
+            <p>No payment is collected through this form. Accepted requests receive the final deliverables and manual payment terms by email before work starts. Read the <a href="/refund-policy/">refund policy</a>.</p>
           </div>
           <ToolSubmissionForm categories={categories} />
         </div></section>

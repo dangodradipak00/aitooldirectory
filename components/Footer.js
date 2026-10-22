@@ -45,8 +45,6 @@ export default async function Footer() {
             <li><Link href="/categories/">All categories</Link></li>
             <li><Link href="/blog/">Blog</Link></li>
             <li><Link href="/submit/">Submit a tool</Link></li>
-            <li><Link href="/editorial-policy/">Editorial approach</Link></li>
-            <li><Link href="/#guides">Buying guides</Link></li>
           </ul>
         </div>
         <div>
@@ -54,8 +52,6 @@ export default async function Footer() {
           <ul>
             <li><Link href="/about/">About us</Link></li>
             <li><Link href="/authors/editorial-team/">Editorial team</Link></li>
-            <li><Link href="/editorial-policy/">Editorial policy</Link></li>
-            <li><Link href="/advertising-disclosure/">Advertising disclosure</Link></li>
             <li><Link href="/contact/">Contact</Link></li>
             <li><Link href="/privacy-policy/">Privacy policy</Link></li>
             <li><Link href="/cookie-policy/">Cookie policy</Link></li>
