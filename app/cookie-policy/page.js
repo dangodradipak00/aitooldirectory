@@ -1,7 +1,7 @@
 import InfoPage, { contactEmail } from '../../components/InfoPage';
 import { siteUrl } from '../../lib/site';
 
-export const metadata = { title: 'Cookie Policy', description: 'Learn how AgencyToolGuide uses cookies, local storage and similar technologies.', alternates: { canonical: '/cookie-policy/' } };
+export const metadata = { title: { absolute: 'Cookie Policy | FreemiumAITools' }, description: 'Learn which cookies FreemiumAITools uses, why we use them, and how you can manage, block or disable cookies in your browser settings whenever you want.', alternates: { canonical: '/cookie-policy/' } };
 
 export default function CookiePolicyPage() {
   return <InfoPage eyebrow="Legal" title="Cookie Policy" effective="October 22, 2026">

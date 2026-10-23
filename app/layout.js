@@ -5,13 +5,13 @@ import { siteName, siteUrl } from '../lib/site';
 export const metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'AgencyToolGuide — Software for Small Marketing Agencies',
-    template: '%s | AgencyToolGuide'
+    default: 'FreemiumAITools — Software for Small Marketing Agencies',
+    template: '%s | FreemiumAITools'
   },
   description: 'Research AI and agency software by workflow, pricing model and practical fit. Confirm current product details with each vendor.',
   applicationName: siteName,
-  authors: [{ name: 'AgencyToolGuide Editorial Team', url: '/authors/editorial-team/' }],
-  creator: 'AgencyToolGuide Editorial Team',
+  authors: [{ name: 'FreemiumAITools Editorial Team', url: '/authors/editorial-team/' }],
+  creator: 'FreemiumAITools Editorial Team',
   publisher: siteName,
   openGraph: { siteName, type: 'website', locale: 'en_US' },
   twitter: { card: 'summary' },
@@ -29,7 +29,7 @@ export const viewport = {
 
 const themeScript = `
   try {
-    const savedTheme = localStorage.getItem('agency-tool-guide-theme');
+    const savedTheme = localStorage.getItem('freemium-ai-tools-theme');
     const theme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     document.currentScript.parentElement.dataset.theme = theme;
   } catch (_) {}

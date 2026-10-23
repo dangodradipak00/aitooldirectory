@@ -11,23 +11,21 @@ export default async function Footer() {
     <footer className={styles.siteFooter}>
       <div className={`${styles.shell} ${styles.footerCtaWrap}`}>
         <div className={styles.footerCta}>
-          <span className={styles.ctaEyebrow}>Built for growing software products</span>
           <h2>Put your tool in front of people already looking for it.</h2>
           <p>Request an editorial tool profile from $9. Every submission is reviewed before payment, commercial relationships are disclosed and no traffic or ranking is guaranteed.</p>
           <Link className={styles.ctaButton} href="/submit/">View submission process <span aria-hidden="true">→</span></Link>
-          <small>Clear deliverables. Editorial review. Transparent links.</small>
         </div>
       </div>
       <div className={`${styles.shell} ${styles.footerGrid}`}>
         <div>
           <Link href="/" className={`${styles.brand} ${styles.footerBrand}`}>
-            <span className={styles.brandMark}>A</span>
-            <span>AgencyTool<span>Guide</span></span>
+            <span className={styles.brandMark}>F</span>
+            <span>FreemiumAI<span>Tools</span></span>
           </Link>
           <p>Practical software discovery for small SEO and digital marketing agencies.</p>
           <div className={styles.footerContact}>
             <span>Questions or listing enquiries?</span>
-            <a href="mailto:hello@agencytoolguide.com">hello@agencytoolguide.com</a>
+            <a href="mailto:hello@freemiumaitools.com">hello@freemiumaitools.com</a>
           </div>
         </div>
         <div>
@@ -62,9 +60,9 @@ export default async function Footer() {
         </div>
       </div>
       <div className={`${styles.shell} ${styles.footerBottom}`}>
-        <p>© {new Date().getFullYear()} AgencyToolGuide</p>
+        <p>© {new Date().getFullYear()} FreemiumAITools</p>
       </div>
-      <div className={`${styles.shell} ${styles.footerWordmark}`} aria-hidden="true">AgencyToolGuide</div>
+      <div className={`${styles.shell} ${styles.footerWordmark}`} aria-hidden="true">FreemiumAITools</div>
     </footer>
   );
 }

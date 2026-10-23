@@ -5,12 +5,10 @@
 .footerCta::before, .footerCta::after { content: ""; position: absolute; z-index: -1; border-radius: 50%; filter: blur(2px); }
 .footerCta::before { width: 260px; height: 260px; left: -90px; top: -150px; background: rgba(58,171,242,.18); }
 .footerCta::after { width: 310px; height: 310px; right: -120px; bottom: -210px; background: rgba(130,91,224,.16); }
-.ctaEyebrow { margin-bottom: 12px; color: #0876d1; font-size: .7rem; font-weight: 900; letter-spacing: .13em; text-transform: uppercase; }
 .footerCta h2 { max-width: 780px; margin: 0; color: #101b32; font-size: clamp(2.15rem,4.4vw,4rem); line-height: 1.03; letter-spacing: -.055em; }
 .footerCta p { max-width: 720px; margin: 21px 0 27px; color: #42506a; font-size: .96rem; line-height: 1.7; }
 .ctaButton { min-height: 50px; display: inline-flex; align-items: center; justify-content: center; gap: 12px; padding: 0 23px; border-radius: 10px; color: white !important; background: #0876d1; box-shadow: 0 10px 22px rgba(8,118,209,.24); font-size: .84rem; font-weight: 850; transition: transform .16s ease,background .16s ease,box-shadow .16s ease; }
 .ctaButton:hover { transform: translateY(-2px); background: #075ca4; box-shadow: 0 14px 28px rgba(8,118,209,.3); }
-.footerCta small { margin-top: 12px; color: #6c7890; font-size: .69rem; }
 .footerGrid { display: grid; grid-template-columns: 1.45fr 1fr .8fr 1fr; gap: 48px; }
 .brand { display: inline-flex; align-items: center; gap: 9px; font-size: 1.16rem; font-weight: 850; letter-spacing: -.035em; }
 .brand > span:last-child > span { color: var(--blue); }
@@ -30,4 +28,4 @@
 .footerWordmark { overflow: hidden; margin-top: 26px; padding: 10px 0 20px; color: transparent; background: linear-gradient(180deg,#fff 0%,#e8edf4 34%,#768092 68%,#05070b 100%); background-clip: text; -webkit-background-clip: text; font-size: clamp(4rem,10.7vw,8.8rem); font-weight: 850; line-height: .88; letter-spacing: -.085em; white-space: nowrap; user-select: none; }
 @media (max-width: 960px) { .footerGrid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
 @media (max-width: 620px) { .shell { width: min(calc(100% - 28px),var(--shell)); } .footerCtaWrap { transform: translateY(-48px); margin-bottom: -4px; } .footerCta { padding: 42px 20px 38px; border-radius: 18px; } .footerCta h2 { font-size: 2.25rem; } .footerCta p { margin-block: 18px 24px; font-size: .84rem; } .ctaButton { width: 100%; } .footerGrid { grid-template-columns: 1fr; gap: 30px; } .footerBottom { display: block; } .footerBottom p { margin: 8px 0; } .footerWordmark { margin-top: 20px; padding-bottom: 8px; font-size: clamp(3rem,14.8vw,5rem); letter-spacing: -.075em; } }
-@media (max-width: 420px) { .shell { width: min(calc(100% - 24px),var(--shell)); } .footerCtaWrap { transform: translateY(-38px); } .footerCta { padding: 34px 16px 32px; border-radius: 16px; } .footerCta h2 { font-size: 1.95rem; line-height: 1.08; } .footerCta p { font-size: .8rem; line-height: 1.6; } .footerCta small { line-height: 1.45; } .footerContact a { max-width: 100%; overflow-wrap: anywhere; } .footerWordmark { font-size: 13.6vw; } }
+@media (max-width: 420px) { .shell { width: min(calc(100% - 24px),var(--shell)); } .footerCtaWrap { transform: translateY(-38px); } .footerCta { padding: 34px 16px 32px; border-radius: 16px; } .footerCta h2 { font-size: 1.95rem; line-height: 1.08; } .footerCta p { font-size: .8rem; line-height: 1.6; } .footerContact a { max-width: 100%; overflow-wrap: anywhere; } .footerWordmark { font-size: 13.6vw; } }

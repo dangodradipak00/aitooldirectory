@@ -28,7 +28,7 @@ export default function Header({ heroContrast = false }) {
   const toggleTheme = () => {
     const nextTheme = darkMode ? 'light' : 'dark';
     document.body.dataset.theme = nextTheme;
-    localStorage.setItem('agency-tool-guide-theme', nextTheme);
+    localStorage.setItem('freemium-ai-tools-theme', nextTheme);
     setDarkMode(nextTheme === 'dark');
   };
 
@@ -37,9 +37,9 @@ export default function Header({ heroContrast = false }) {
       <a className={styles.skipLink} href="#main-content">Skip to main content</a>
       <header className={`${styles.siteHeader} ${heroContrast && darkMode ? styles.heroContrast : ''} ${scrolled ? styles.scrolled : ''}`}>
         <div className={`${styles.shell} ${styles.headerInner}`}>
-          <Link href="/" className={styles.brand} aria-label="AgencyToolGuide home">
-            <span className={styles.brandMark}>A</span>
-            <span className={styles.brandText}>AgencyTool<span>Guide</span></span>
+          <Link href="/" className={styles.brand} aria-label="FreemiumAITools home">
+            <span className={styles.brandMark}>F</span>
+            <span className={styles.brandText}>FreemiumAI<span>Tools</span></span>
           </Link>
 
           <nav className={styles.desktopNav} aria-label="Main navigation">

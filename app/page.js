@@ -17,7 +17,7 @@ export const metadata = {
   title: 'AI & Agency Software Directory',
   description: 'Research AI, SEO, reporting and agency software by workflow, pricing model and practical fit.',
   alternates: { canonical: '/' },
-  openGraph: { title: 'AgencyToolGuide Software Directory', description: 'Research software by workflow, pricing model and practical fit.', url: '/' }
+  openGraph: { title: 'FreemiumAITools Software Directory', description: 'Research software by workflow, pricing model and practical fit.', url: '/' }
 };
 
 const featuredAiTools = [
@@ -47,8 +47,8 @@ export default async function HomePage() {
   const homeSchema = {
     '@context': 'https://schema.org',
     '@graph': [
-      { '@type': 'WebSite', '@id': `${absoluteUrl('/')}#website`, url: absoluteUrl('/'), name: siteName, alternateName: 'Agency Tool Guide' },
-      { '@type': 'Organization', '@id': `${absoluteUrl('/')}#organization`, name: siteName, url: absoluteUrl('/'), email: 'hello@agencytoolguide.com' }
+      { '@type': 'WebSite', '@id': `${absoluteUrl('/')}#website`, url: absoluteUrl('/'), name: siteName, alternateName: 'Freemium AI Tools' },
+      { '@type': 'Organization', '@id': `${absoluteUrl('/')}#organization`, name: siteName, url: absoluteUrl('/'), email: 'hello@freemiumaitools.com' }
     ]
   };
   return (

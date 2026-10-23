@@ -1,11 +1,11 @@
 import InfoPage, { contactEmail } from '../../components/InfoPage';
 import { siteUrl } from '../../lib/site';
 
-export const metadata = { title: 'Disclaimer', description: 'Important limitations and commercial disclosures for AgencyToolGuide content.', alternates: { canonical: '/disclaimer/' } };
+export const metadata = { title: { absolute: 'Disclaimer | FreemiumAITools' }, description: 'Read the FreemiumAITools disclaimer about the accuracy of information, third-party links, external content and the limits of our responsibility to all users.', alternates: { canonical: '/disclaimer/' } };
 
 export default function DisclaimerPage() {
   return <InfoPage eyebrow="Transparency" title="Disclaimer" effective="October 22, 2026">
-    <section><h2>General information only</h2><p>Everything on {siteUrl} (the "Website"), including tool profiles, blog posts, guides, comparisons and recommendations, is for general information and education only. AgencyToolGuide is an independent directory and publication.</p></section>
+    <section><h2>General information only</h2><p>Everything on {siteUrl} (the "Website"), including tool profiles, blog posts, guides, comparisons and recommendations, is for general information and education only. FreemiumAITools is an independent directory and publication.</p></section>
     <section><h2>Not professional advice</h2><p>Nothing on the Website is legal, financial, tax, investment, medical or other professional advice. Our articles may include opinions and general guidance, so please talk to a qualified professional about your own situation.</p></section>
     <section><h2>Third-party tools and claims</h2><p>We list software we do not own or operate. Descriptions, features, pros, cons and FAQs may come from tool owners, public sources or our editors. Listing a tool does not mean we test, verify, certify or endorse it, and claims made by tool providers are their own, not ours.</p></section>
     <section><h2>Accuracy and changes</h2><p>Pricing, plans, features, limits and availability change often and without notice. We try to keep the directory accurate but cannot promise it is complete or current. Please confirm important details with the provider before you buy or rely on a tool.</p></section>

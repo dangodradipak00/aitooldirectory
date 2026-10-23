@@ -1,8 +1,8 @@
 import InfoPage, { contactEmail } from '../../../components/InfoPage';
 
 export const metadata = {
-  title: 'AgencyToolGuide Editorial Team',
-  description: 'Learn how the AgencyToolGuide Editorial Team researches, prepares and maintains AI tool profiles, comparisons and buying guides.',
+  title: { absolute: 'Editorial Team | FreemiumAITools' },
+  description: 'Meet the FreemiumAITools editorial team. Learn about the writers and reviewers behind our guides, listings and reviews, and how we keep our content accurate.',
   alternates: { canonical: '/authors/editorial-team/' },
 };
 
@@ -10,18 +10,18 @@ export default function AuthorPage() {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'AgencyToolGuide Editorial Team',
+    name: 'FreemiumAITools Editorial Team',
     email: contactEmail,
-    description: 'The team responsible for researching, organizing and maintaining AgencyToolGuide AI tool profiles, category pages, comparisons and buying guides.',
+    description: 'The team responsible for researching, organizing and maintaining FreemiumAITools AI tool profiles, category pages, comparisons and buying guides.',
   };
 
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
     <InfoPage
       eyebrow="Author"
-      title="AgencyToolGuide Editorial Team"
+      title="FreemiumAITools Editorial Team"
       updated="October 22, 2026"
-      intro="The AgencyToolGuide Editorial Team researches, organizes and maintains our AI tool profiles, category pages, comparisons and buying guides. Our goal is simple: help you understand what a tool does, who it suits and what to check before you buy."
+      intro="The FreemiumAITools Editorial Team researches, organizes and maintains our AI tool profiles, category pages, comparisons and buying guides. Our goal is simple: help you understand what a tool does, who it suits and what to check before you buy."
     >
       <section>
         <h2>What we do</h2>

@@ -40,8 +40,8 @@ const blogSchema = z.object({
   title: z.string().trim().min(4).max(180),
   slug,
   content: z.string().trim().min(40),
-  seoTitle: z.string().trim().max(60),
-  seoDescription: z.string().trim().max(160),
+  seoTitle: z.string().trim().max(180),
+  seoDescription: z.string().trim().max(320),
   status: z.enum(['draft', 'published', 'archived'])
 });
 

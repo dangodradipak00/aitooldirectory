@@ -1,12 +1,12 @@
 import InfoPage, { contactEmail } from '../../components/InfoPage';
 import { siteUrl } from '../../lib/site';
 
-export const metadata = { title: 'Terms and Conditions', description: 'Terms governing access to AgencyToolGuide and use of its directory and submission services.', alternates: { canonical: '/terms-and-conditions/' } };
+export const metadata = { title: { absolute: 'Terms and Conditions | FreemiumAITools' }, description: 'Read the terms for using FreemiumAITools, including user responsibilities, listing submission rules, content guidelines and the limits of our service to you.', alternates: { canonical: '/terms-and-conditions/' } };
 
 export default function TermsPage() {
   return <InfoPage eyebrow="Legal" title="Terms and Conditions" effective="October 22, 2026">
-    <section><h2>Agreement</h2><p>These Terms govern your use of {siteUrl} (the "Website"), operated by AgencyToolGuide ("we", "us"). By using the Website, you agree to them. You must be at least 13 years old to use the Website, and at least 18 to submit a tool or buy any service from us.</p></section>
-    <section><h2>What the Website is</h2><p>AgencyToolGuide is an independent directory and blog about AI tools and software. We do not own or operate the tools we list, and we are not a party to any deal between you and a software provider. You cannot buy anything directly through the Website.</p></section>
+    <section><h2>Agreement</h2><p>These Terms govern your use of {siteUrl} (the "Website"), operated by FreemiumAITools ("we", "us"). By using the Website, you agree to them. You must be at least 13 years old to use the Website, and at least 18 to submit a tool or buy any service from us.</p></section>
+    <section><h2>What the Website is</h2><p>FreemiumAITools is an independent directory and blog about AI tools and software. We do not own or operate the tools we list, and we are not a party to any deal between you and a software provider. You cannot buy anything directly through the Website.</p></section>
     <section><h2>Tool submissions</h2><ul><li>All submissions are reviewed by hand, and submitting does not guarantee publication.</li><li>We may edit, categorize, approve, reject, archive, unpublish or delete any submission or listing at any time, including to improve clarity, accuracy, SEO or compliance.</li><li>You confirm that your information is accurate, that you own the tool or are authorized to submit it, and that you have the right to use every logo, image and text you upload.</li><li>You give us a non-exclusive, worldwide, royalty-free license to use, edit, display and publish your submission on the Website and in promoting the directory.</li><li>We may contact you by email about your submission.</li></ul></section>
     <section><h2>Paid services</h2><p>We may offer paid listings, featured or sponsored placements, advertising or editorial profile services. There is currently no online checkout. Scope, price, payment method, deliverables and timing are agreed in writing by email, and payment is handled separately. See our <a href="/refund-policy/">Refund Policy</a> for refunds.</p><p>Payment does not guarantee a favorable review, and nothing we offer guarantees traffic, leads, sales, backlinks or search rankings.</p></section>
     <section><h2>Editorial independence</h2><p>Listing a tool does not mean we endorse, certify or verify its claims. Claims made by tool providers are their own. We decide whether links use standard, sponsored or nofollow attributes, and we disclose sponsored or affiliate relationships where they apply.</p></section>
@@ -18,6 +18,6 @@ export default function TermsPage() {
     <section><h2>Indemnity</h2><p>You agree to defend and hold us harmless from claims, losses and expenses arising from content you submit or your breach of these Terms or any law.</p></section>
     <section><h2>Termination and changes</h2><p>We may suspend access or remove content at any time if we believe these Terms are broken or to protect the Website. We may change the Website or these Terms, and continued use after a change means you accept it.</p></section>
     <section><h2>Governing law</h2><p>These Terms are governed by the laws of the State of Delaware, United States, without regard to conflict-of-law rules. Any dispute will be brought in the state or federal courts located in Delaware, and you agree to their jurisdiction.</p></section>
-    <section><h2>Contact</h2><p>AgencyToolGuide, <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.</p></section>
+    <section><h2>Contact</h2><p>FreemiumAITools, <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.</p></section>
   </InfoPage>;
 }

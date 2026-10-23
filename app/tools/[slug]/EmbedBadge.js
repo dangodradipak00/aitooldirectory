@@ -14,7 +14,7 @@ export default function EmbedBadge({ toolName, slug }) {
 
   const toolUrl = `${origin}/tools/${slug}/`;
   const isDark = theme === 'dark';
-  const embedCode = `<a href="${toolUrl}" target="_blank" rel="nofollow noopener noreferrer" aria-label="${toolName} featured on AgencyToolGuide" style="display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid ${isDark ? '#334155' : '#dbe3ee'};border-radius:10px;background:${isDark ? '#0f172a' : '#ffffff'};color:${isDark ? '#f8fafc' : '#14213d'};font-family:Arial,sans-serif;text-decoration:none"><span style="display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:#0876d1;color:#fff;font-weight:800">A</span><span style="display:grid;line-height:1.15"><small style="color:${isDark ? '#94a3b8' : '#6c7890'};font-size:10px">Featured on</small><strong style="font-size:14px">AgencyToolGuide</strong></span></a>`;
+  const embedCode = `<a href="${toolUrl}" target="_blank" rel="nofollow noopener noreferrer" aria-label="${toolName} featured on FreemiumAITools" style="display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid ${isDark ? '#334155' : '#dbe3ee'};border-radius:10px;background:${isDark ? '#0f172a' : '#ffffff'};color:${isDark ? '#f8fafc' : '#14213d'};font-family:Arial,sans-serif;text-decoration:none"><span style="display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:#0876d1;color:#fff;font-weight:800">F</span><span style="display:grid;line-height:1.15"><small style="color:${isDark ? '#94a3b8' : '#6c7890'};font-size:10px">Featured on</small><strong style="font-size:14px">FreemiumAITools</strong></span></a>`;
 
   const copyCode = async () => {
     await navigator.clipboard.writeText(embedCode);
@@ -27,7 +27,7 @@ export default function EmbedBadge({ toolName, slug }) {
       <div className={styles.embedCopy}>
         <span className={styles.embedEyebrow}>Share your feature</span>
         <h2>{toolName} embed badge</h2>
-        <p>Add this badge to your website, product page or footer to show that {toolName} is listed on AgencyToolGuide.</p>
+        <p>Add this badge to your website, product page or footer to show that {toolName} is listed on FreemiumAITools.</p>
       </div>
 
       <div className={styles.embedBuilder}>
@@ -36,9 +36,9 @@ export default function EmbedBadge({ toolName, slug }) {
           <button type="button" className={theme === 'dark' ? styles.themeActive : undefined} aria-pressed={theme === 'dark'} onClick={() => setTheme('dark')}>Dark</button>
         </div>
 
-        <a className={`${styles.embedPreview} ${isDark ? styles.embedPreviewDark : ''}`} href={`/tools/${slug}/`} aria-label={`${toolName} featured on AgencyToolGuide`}>
+        <a className={`${styles.embedPreview} ${isDark ? styles.embedPreviewDark : ''}`} href={`/tools/${slug}/`} aria-label={`${toolName} featured on FreemiumAITools`}>
           <span className={styles.embedLogo}>A</span>
-          <span><small>Featured on</small><strong>AgencyToolGuide</strong></span>
+          <span><small>Featured on</small><strong>FreemiumAITools</strong></span>
           <span className={styles.embedStar} aria-hidden="true">★</span>
         </a>
 

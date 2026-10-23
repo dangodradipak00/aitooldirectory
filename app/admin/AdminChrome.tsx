@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { siteName } from '@/lib/site';
 import { signOutAdmin } from './actions';
 import styles from './admin.module.css';
 
@@ -46,14 +47,15 @@ export default function AdminChrome({ user, children }: {
   const [categoryOpen, setCategoryOpen] = useState(pathname.includes('/categories') || pathname.includes('/subcategories'));
   const [toolsOpen, setToolsOpen] = useState(pathname.includes('/tools') || pathname.includes('/submissions'));
   const active = pageItems.find((item) => isCurrent(pathname, item.href)) ?? pageItems[0];
-  const initials = (user.name || user.email).split(/\s+/).map((part) => part[0]).join('').slice(0, 2).toUpperCase();
+  const displayName = siteName;
+  const initials = displayName.slice(0, 1).toUpperCase();
 
   return (
     <div className={styles.adminShell}>
       <button className={`${styles.sidebarBackdrop} ${open ? styles.backdropVisible : ''}`} aria-label="Close navigation" onClick={() => setOpen(false)} />
       <aside className={`${styles.sidebar} ${open ? styles.sidebarOpen : ''}`}>
         <div className={styles.sidebarHead}>
-          <Link className={styles.adminBrand} href="/admin/" onMouseEnter={() => router.prefetch('/admin/')} onFocus={() => router.prefetch('/admin/')} onClick={() => setOpen(false)}><span>A</span><strong>AgencyToolGuide</strong><small>Admin workspace</small></Link>
+          <Link className={styles.adminBrand} href="/admin/" onMouseEnter={() => router.prefetch('/admin/')} onFocus={() => router.prefetch('/admin/')} onClick={() => setOpen(false)}><span>F</span><strong>FreemiumAITools</strong><small>Admin workspace</small></Link>
           <button className={styles.sidebarClose} type="button" aria-label="Close menu" onClick={() => setOpen(false)}><Icon name="close" /></button>
         </div>
         <p className={styles.navLabel}>Workspace</p>
@@ -84,14 +86,14 @@ export default function AdminChrome({ user, children }: {
         <nav aria-label="Website links"><Link href="/" target="_blank"><Icon name="external" /><span>View website</span></Link></nav>
         <div className={styles.profile}>
           <span className={styles.avatar}>{initials}</span>
-          <div><strong>{user.name || 'Admin'}</strong><small>{user.email}</small></div>
+          <div><strong>{displayName}</strong><small>{user.email}</small></div>
           <form action={signOutAdmin}><button type="submit" aria-label="Sign out"><Icon name="logout" /></button></form>
         </div>
       </aside>
       <div className={styles.workspace}>
         <header className={styles.topbar}>
           <div><button className={styles.menuButton} type="button" aria-label="Open navigation" onClick={() => setOpen(true)}><Icon name="menu" /></button><span className={styles.topbarTitle}>{active.label}</span></div>
-          <div className={styles.topbarUser}><span className={styles.topbarStatus}><i /> System online</span><span className={styles.avatar}>{initials}</span><div><strong>{user.name || 'Admin'}</strong><small>Administrator</small></div></div>
+          <div className={styles.topbarUser}><span className={styles.topbarStatus}><i /> System online</span><span className={styles.avatar}>{initials}</span><div><strong>{displayName}</strong><small>Administrator</small></div></div>
         </header>
         <main className={styles.adminMain}>{children}</main>
       </div>

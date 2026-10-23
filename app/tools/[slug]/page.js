@@ -10,6 +10,7 @@ import { getVendorLinkRel, getVendorTrackingUrl } from '../../../lib/link-utils'
 import { getPublicCategories } from '../../../lib/public-categories';
 import { getPublicRelatedTools, getPublicTool } from '../../../lib/public-tools';
 import { absoluteUrl, editorialTeamName } from '../../../lib/site';
+import { getToolSeoDescription, getToolSeoTitle } from '../../../lib/tool-seo';
 import MarkdownContent from '../../../components/MarkdownContent';
 import styles from './page.module.css';
 import ui from '../../../styles/ui.module.css';
@@ -35,11 +36,14 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const tool = await getPublicTool(slug);
   if (!tool) return {};
+  const title = getToolSeoTitle(tool.name);
+  const description = getToolSeoDescription(tool.name);
+
   return {
-    title: tool.seoTitle || `${tool.name}: Features, Pricing, Pros & Cons`,
-    description: tool.seoDescription || `Explore ${tool.name} features, pricing, pros, cons and key use cases to understand whether it fits your business, team or workflow.`,
+    title: { absolute: title },
+    description,
     alternates: { canonical: `/tools/${tool.slug}/` },
-    openGraph: { title: `${tool.name}: Features, Pricing, Pros & Cons`, description: tool.summary, url: `/tools/${tool.slug}/`, type: 'article' }
+    openGraph: { title, description, url: `/tools/${tool.slug}/`, type: 'article' }
   };
 }
 
@@ -120,7 +124,7 @@ export default async function ToolPage({ params }) {
               <div className={styles.profileIdentity}>
                 <div className={`${styles.detailLogo} ${styles[`accent${category.accent[0].toUpperCase()}${category.accent.slice(1)}`]}`}>{tool.logoUrl ? <img src={tool.logoUrl} alt="" /> : tool.initials}</div>
                 <div className={styles.detailTitle}>
-                  <h1>{tool.name} <span className={styles.verifiedMark} title="Information checked by the AgencyToolGuide editorial team" aria-label="Editorially checked profile"><VerifiedIcon /></span></h1>
+                  <h1>{tool.name} <span className={styles.verifiedMark} title="Information checked by the FreemiumAITools editorial team" aria-label="Editorially checked profile"><VerifiedIcon /></span></h1>
                   <div className={styles.titleBadges}>
                     <span className={`${styles.pricingType} ${styles[`pricing${pricingType}`]}`}>{tool.pricing}</span>
                     {tool.sponsored && <span className={styles.sponsoredDisclosure}>Sponsored listing</span>}
@@ -128,7 +132,7 @@ export default async function ToolPage({ params }) {
                 </div>
               </div>
               <div className={styles.profileActions}>
-                <ShareButton title={`Explore ${tool.name} on AgencyToolGuide`} />
+                <ShareButton title={`Explore ${tool.name} on FreemiumAITools`} />
                 <a className={styles.siteButton} href={vendorUrl} target="_blank" rel={vendorLinkRel}><ExternalIcon /> Visit this site</a>
               </div>
             </div>

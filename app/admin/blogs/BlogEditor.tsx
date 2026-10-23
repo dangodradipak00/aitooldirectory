@@ -75,7 +75,7 @@ export default function BlogEditor({ action, post = null, heading, submitLabel }
         <aside className={styles.toolFormAside}>
           <section className={styles.formCard}><h2>Publish</h2><label>Status<select name="status" defaultValue={post?.status || 'draft'}><option value="draft">Draft</option><option value="published">Published</option><option value="archived">Archived</option></select></label><div className={styles.blogPublishSummary}><span>Published</span><strong>{formatDate(post?.publishedAt)}</strong><span>Last updated</span><strong>{post ? formatDate(post.updatedAt) : 'New article'}</strong></div></section>
           <SeoFields initialTitle={post?.seoTitle} initialDescription={post?.seoDescription} />
-          <section className={styles.formCard}><h2>Author</h2><p className={styles.submissionModeNote}>Articles are published under the AgencyToolGuide Editorial Team profile.</p></section>
+          <section className={styles.formCard}><h2>Author</h2><p className={styles.submissionModeNote}>Articles are published under the FreemiumAITools Editorial Team profile.</p></section>
         </aside>
       </div>
     </AdminForm>

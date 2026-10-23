@@ -13,7 +13,7 @@ export default async function AdminLoginPage() {
   return (
     <main className={styles.loginPage}>
       <section className={styles.loginCard}>
-        <Link className={styles.loginBrand} href="/"><span>A</span>AgencyToolGuide</Link>
+        <Link className={styles.loginBrand} href="/"><span>F</span>FreemiumAITools</Link>
         <p className={styles.kicker}>Private workspace</p>
         <h1>Welcome back.</h1>
         <p>Sign in with the admin account you created in Neon.</p>

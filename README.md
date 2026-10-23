@@ -1,4 +1,4 @@
-# AgencyToolGuide
+# FreemiumAITools
 
 SEO-friendly software directory for small marketing agencies, built with Next.js and React.
 

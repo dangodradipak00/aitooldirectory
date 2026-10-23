@@ -1,7 +1,7 @@
 import InfoPage, { contactEmail } from '../../components/InfoPage';
 import { siteUrl } from '../../lib/site';
 
-export const metadata = { title: 'Contact Us', description: 'Contact AgencyToolGuide about listings, corrections, privacy requests, copyright concerns or partnerships.', alternates: { canonical: '/contact/' } };
+export const metadata = { title: { absolute: 'Contact Us | FreemiumAITools' }, description: 'Have a question, suggestion or partnership idea? Get in touch with the FreemiumAITools team using our contact form and we will reply as soon as possible.', alternates: { canonical: '/contact/' } };
 
 export default function ContactPage() {
   return <InfoPage eyebrow="Get in touch" title="Contact Us" showDates={false} intro={<>For any question, correction or request, email us at <a href={`mailto:${contactEmail}`}>{contactEmail}</a>. We read every message and usually reply within 2 to 3 business days.</>}>

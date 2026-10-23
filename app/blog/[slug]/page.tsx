@@ -90,7 +90,7 @@ export default async function BlogArticlePage({ params }: BlogPostPageProps) {
               <span className={styles.artworkOrbOne} />
               <span className={styles.artworkOrbTwo} />
               <span className={styles.artworkMesh} />
-              <strong>AgencyToolGuide</strong>
+              <strong>FreemiumAITools</strong>
             </div>}
           </div>
           <div className={styles.articleReadingGrid}>
@@ -144,7 +144,7 @@ export default async function BlogArticlePage({ params }: BlogPostPageProps) {
                   </h3>
                 </div>
                 <p className={styles.authorBio}>
-                  The editorial team researches, structures and maintains AgencyToolGuide’s software profiles, category pages and practical buying guidance.
+                  The editorial team researches, structures and maintains FreemiumAITools’ software profiles, category pages and practical buying guidance.
                 </p>
                 <Link href="/authors/editorial-team/" className={styles.authorLink}>
                   <span>About our editorial standards</span>

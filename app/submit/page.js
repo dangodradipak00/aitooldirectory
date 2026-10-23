@@ -6,8 +6,8 @@ import styles from './page.module.css';
 import ui from '../../styles/ui.module.css';
 
 export const metadata = {
-  title: 'Submit an AI Tool',
-  description: 'Review AgencyToolGuide submission requirements, commercial disclosures and category options before requesting an editorial tool profile.',
+  title: { absolute: 'Submit Your Tool or Website | FreemiumAITools' },
+  description: 'Submit your listing to FreemiumAITools and get discovered by more people. Fill out the simple form and our team will review your submission and reply quickly.',
   alternates: { canonical: '/submit/' }
 };
 

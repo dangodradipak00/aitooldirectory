@@ -8,10 +8,10 @@ import ui from '@/styles/ui.module.css';
 
 export const dynamic = 'force-dynamic';
 export const metadata = {
-  title: 'AI Tool Insights & Guides',
-  description: 'Practical guides, comparisons and insights for choosing AI and agency software.',
+  title: { absolute: 'Blog: Guides, Tips & Insights | FreemiumAITools' },
+  description: 'Read the latest expert guides, practical tips and insights from the FreemiumAITools editorial team. Well researched articles to help you choose with confidence.',
   alternates: { canonical: '/blog/' },
-  openGraph: { title: 'AI Tool Insights & Guides', description: 'Practical software research for modern agency teams.', url: '/blog/' }
+  openGraph: { title: 'Blog: Guides, Tips & Insights | FreemiumAITools', description: 'Read the latest expert guides, practical tips and insights from the FreemiumAITools editorial team. Well researched articles to help you choose with confidence.', url: '/blog/' }
 };
 
 function publishedDate(post: { publishedAt: Date | null; createdAt: Date }) {

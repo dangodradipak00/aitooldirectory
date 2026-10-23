@@ -7,7 +7,7 @@ import { isToolInCategory } from '../data/tools';
 import styles from './Directory.module.css';
 import ui from '../styles/ui.module.css';
 
-const SAVED_KEY = 'agency-tool-guide-saved';
+const SAVED_KEY = 'freemium-ai-tools-saved';
 
 export default function Directory({ tools, categories }) {
   const [query, setQuery] = useState('');
