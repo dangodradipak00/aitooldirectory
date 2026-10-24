@@ -40,7 +40,7 @@ export default function CategoryDirectory({ tools, subcategories }) {
         <label><span className={ui.srOnly}>Sort</span><select value={sort} onChange={change(setSort)}><option value="featured">Featured</option><option value="az">Name A–Z</option><option value="za">Name Z–A</option></select></label>
       </div>
       <div className={styles.results}><p aria-live="polite">{filtered.length} {filtered.length === 1 ? 'tool' : 'tools'}</p><button type="button" onClick={clear}>Clear filters</button></div>
-      {visible.length ? <div className={styles.grid}>{visible.map((tool) => <ToolCard key={tool.slug} tool={tool} />)}</div> : <div className={styles.empty}><h3>No matching tools</h3><p>Try another subcategory or clear the filters.</p><Link href="/submit/">Add your tool</Link></div>}
+      {visible.length ? <div className={styles.grid}>{visible.map((tool) => <ToolCard key={tool.slug} tool={tool} />)}</div> : <div className={styles.empty}><h3>No matching tools</h3><p>Try another subcategory or clear the filters.</p><Link className={ui.primaryButton} href="/submit/">Add your tool</Link></div>}
       {pageCount > 1 && <nav className={styles.pagination} aria-label="Tool results pages"><button type="button" disabled={currentPage === 1} onClick={() => setPage(currentPage - 1)}>Previous</button><span>Page {currentPage} of {pageCount}</span><button type="button" disabled={currentPage === pageCount} onClick={() => setPage(currentPage + 1)}>Next</button></nav>}
     </div>
   );

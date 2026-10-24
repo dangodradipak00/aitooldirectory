@@ -3,6 +3,7 @@ import { BookmarkIcon, ExternalIcon } from './Icons';
 import { getCategory } from '../data/categories';
 import { getVendorLinkRel, getVendorTrackingUrl } from '../lib/link-utils';
 import styles from './ToolCard.module.css';
+import ui from '../styles/ui.module.css';
 
 export default function ToolCard({ tool, saved = false, onSave }) {
   const category = getCategory(tool.primaryCategoryId);
@@ -26,8 +27,8 @@ export default function ToolCard({ tool, saved = false, onSave }) {
       <div className={styles.toolCardBottom}>
         <span className={`${styles.priceTag} ${tool.pricing === 'Paid' ? styles.pricePaid : styles.priceFree}`}>{tool.pricing}</span>
         <div className={styles.cardLinks}>
-          <Link href={`/tools/${tool.slug}/`} className={styles.detailsLink}>Details</Link>
-          <a href={getVendorTrackingUrl(tool)} target="_blank" rel={getVendorLinkRel(tool)} className={styles.visitLink}>Visit <ExternalIcon /></a>
+          <Link href={`/tools/${tool.slug}/`} className={`${ui.primaryButton} ${styles.cardAction}`}>Details</Link>
+          <a href={getVendorTrackingUrl(tool)} target="_blank" rel={getVendorLinkRel(tool)} className={`${ui.primaryButton} ${styles.cardAction}`}>Visit <ExternalIcon /></a>
         </div>
       </div>
     </article>

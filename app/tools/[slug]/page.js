@@ -133,7 +133,7 @@ export default async function ToolPage({ params }) {
               </div>
               <div className={styles.profileActions}>
                 <ShareButton title={`Explore ${tool.name} on FreemiumAITools`} />
-                <a className={styles.siteButton} href={vendorUrl} target="_blank" rel={vendorLinkRel}><ExternalIcon /> Visit this site</a>
+                <a className={`${ui.primaryButton} ${styles.siteButton}`} href={vendorUrl} target="_blank" rel={vendorLinkRel}><ExternalIcon /> Visit this site</a>
               </div>
             </div>
 
@@ -223,7 +223,7 @@ export default async function ToolPage({ params }) {
                   <h2>Sponsor your tool</h2>
                 </div>
                 <p>Put your tool in front of relevant buyers, gain more referral traffic and grow brand visibility.</p>
-                <Link className={styles.adButton} href="/submit/">Sponsor your tool <span aria-hidden="true">&rarr;</span></Link>
+                <Link className={`${ui.primaryButton} ${styles.adButton}`} href="/submit/">Sponsor your tool <span aria-hidden="true">&rarr;</span></Link>
               </article>
 
               <nav className={styles.otherCategoriesCard} aria-labelledby="other-categories-title">
@@ -270,7 +270,7 @@ export default async function ToolPage({ params }) {
                       </div>
                       <p>“{relatedTool.summary}”</p>
                       <div className={styles.relatedTags}>{relatedTool.sharedSubcategories.map((subcategory) => <span key={subcategory.id}>{subcategory.name}</span>)}</div>
-                      <Link className={styles.relatedLink} href={`/tools/${relatedTool.slug}/`}><ExternalIcon /> View tool</Link>
+                      <Link className={`${ui.primaryButton} ${styles.relatedLink}`} href={`/tools/${relatedTool.slug}/`}><ExternalIcon /> View tool</Link>
                     </div>
                   </article>
                 ))}

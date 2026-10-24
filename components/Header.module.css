@@ -21,8 +21,7 @@
 .desktopNav a:hover { color: var(--blue); }
 .desktopNav a:hover::after { right: 0; }
 .headerActions { display: flex; align-items: center; gap: 10px; }
-.submitButton { min-height: 39px; display: inline-flex; align-items: center; justify-content: center; padding: 0 17px; border-radius: 20px; color: white !important; background: var(--blue); box-shadow: 0 6px 14px rgba(8,118,209,.2); font-size: .7rem; font-weight: 900; letter-spacing: .035em; text-transform: uppercase; white-space: nowrap; transition: transform .16s ease,background .16s ease; }
-.submitButton:hover { transform: translateY(-1px); background: var(--blue-dark); }
+.headerActions .submitButton { min-height: 40px; padding-inline: 16px; }
 .themeButton { width: 34px; min-height: 34px; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: color-mix(in srgb,var(--surface) 72%,transparent); color: var(--text); display: inline-flex; align-items: center; justify-content: center; }
 .themeButton:hover { border-color: #76c2fb; color: var(--blue); background: var(--surface); }
 .menuButton { display: none; width: 34px; min-height: 34px; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: color-mix(in srgb,var(--surface) 72%,transparent); color: var(--ink); align-items: center; justify-content: center; }
@@ -41,7 +40,6 @@
   .brandMark { width: 30px; height: 30px; }
   .desktopNav { display: none; }
   .headerActions { margin-left: auto; gap: 7px; }
-  .submitButton { min-height: 39px; padding-inline: 15px; font-size: .67rem; }
   .themeButton { width: 34px; min-height: 34px; }
   .menuButton { display: inline-flex; flex: 0 0 auto; }
   .mobileMenu { width: min(calc(100% - 28px),var(--shell)); display: grid; margin: 7px auto 0; padding: 7px; border: 1px solid var(--line); border-radius: 15px; background: var(--surface); box-shadow: 0 18px 42px rgba(20,33,61,.16); pointer-events: auto; }
@@ -49,4 +47,4 @@
   .mobileMenu a:hover, .mobileMenu a:focus-visible { color: var(--blue); background: var(--surface-soft); }
 }
 @media (max-width: 500px) { .brandText { display: none; } }
-@media (max-width: 380px) { .headerInner { gap: 7px; padding-inline: 8px 4px; } .headerActions { gap: 5px; } .submitButton { padding-inline: 10px; font-size: .63rem; } .themeButton, .menuButton { width: 32px; min-height: 32px; } }
+@media (max-width: 380px) { .headerInner { gap: 7px; padding-inline: 8px 4px; } .headerActions { gap: 5px; } .themeButton, .menuButton { width: 32px; min-height: 32px; } }

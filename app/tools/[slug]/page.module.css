@@ -41,8 +41,7 @@
 .shareMenu::before { content: ""; position: absolute; right: 14px; top: -6px; width: 10px; height: 10px; border-top: 1px solid var(--line); border-left: 1px solid var(--line); background: var(--surface); transform: rotate(45deg); }
 .shareMenu a { position: relative; z-index: 1; width: 36px; height: 36px; display: grid; place-items: center; border-radius: 8px; color: var(--ink); background: var(--surface-soft); font-size: .88rem; font-weight: 900; }
 .shareMenu a:hover { color: white; background: var(--blue); }
-.siteButton { min-height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; flex: 0 0 auto; padding: 0 24px; border: 1px solid #263f4a; border-radius: 7px; color: white !important; background: #304b55; box-shadow: 0 7px 14px rgba(24,45,54,.2); font-size: .77rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; transition: transform .16s ease,background .16s ease,box-shadow .16s ease; }
-.siteButton:hover { transform: translateY(-1px); background: #213942; box-shadow: 0 10px 20px rgba(24,45,54,.25); }
+.siteButton { flex: 0 0 auto; white-space: nowrap; }
 .profileDivider { height: 3px; background: linear-gradient(90deg,#68ccff 0%,#8a82ff 46%,#ff78a4 75%,#ffb16b 100%); }
 
 .profileBody { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.06fr); gap: 40px; padding: 32px 36px 38px; }
@@ -97,8 +96,7 @@
 .adBrandMark { width: 48px; height: 48px; display: grid; place-items: center; flex: 0 0 auto; border: 1px solid #d9e5c5; border-radius: 10px; color: white; background: linear-gradient(135deg,#0876d1,#2aa6ec); box-shadow: inset 0 0 0 6px #f4fbe9; font-size: 1rem; font-weight: 950; }
 .adCardHeader h2 { margin: 0; font-size: 1rem; line-height: 1.25; letter-spacing: -.02em; }
 .adCard > p { position: relative; z-index: 1; margin: 19px 0 20px; color: var(--text); font-size: .82rem; line-height: 1.55; }
-.adButton { min-height: 43px; display: flex; align-items: center; justify-content: center; gap: 9px; margin-top: auto; padding: 9px 13px; border-radius: 999px; color: white !important; background: #17191d; box-shadow: 0 6px 15px rgba(17,24,39,.16); font-size: .71rem; font-weight: 850; text-align: center; transition: transform .16s ease,background .16s ease,box-shadow .16s ease; }
-.adButton:hover { transform: translateY(-2px); background: #0876d1; box-shadow: 0 9px 20px rgba(8,118,209,.24); }
+.adButton { width: 100%; margin-top: auto; text-align: center; }
 .otherCategoriesCard { position: sticky; top: 88px; align-self: start; max-height: calc(100vh - 106px); overflow-y: auto; overscroll-behavior: contain; padding: 24px 22px 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); box-shadow: 0 8px 24px rgba(31,43,72,.07); scrollbar-color: #b8c8d8 transparent; scrollbar-width: thin; }
 .otherCategoriesCard::-webkit-scrollbar { width: 6px; }
 .otherCategoriesCard::-webkit-scrollbar-track { background: transparent; }
@@ -212,9 +210,8 @@
 .relatedTags { min-height: 24px; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin-bottom: 18px; }
 .relatedTags span { color: var(--muted); font-size: .61rem; font-weight: 700; }
 .relatedTags span + span::before { content: '\2022'; margin-right: 5px; color: var(--blue); }
-.relatedLink { min-height: 41px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: auto; padding: 0 20px; border: 1px solid #428fcd; border-radius: 7px; color: white; background: #428fcd; box-shadow: 0 5px 11px rgba(47,122,183,.24); font-size: .71rem; font-weight: 850; letter-spacing: .09em; text-transform: uppercase; }
+.relatedLink { min-height: 41px; margin-top: auto; padding-inline: 20px; font-size: .71rem; }
 .relatedLink svg { width: 15px; height: 15px; }
-.relatedLink:hover { border-color: #246ea9; background: #246ea9; transform: translateY(-1px); }
 
 @media (max-width: 920px) {
   .profileBody { grid-template-columns: 1fr; }

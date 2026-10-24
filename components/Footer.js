@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { homepageCategoryIds } from '../data/categories';
 import { getPublicCategories } from '../lib/public-categories';
 import styles from './Footer.module.css';
+import ui from '../styles/ui.module.css';
 
 export default async function Footer() {
   const publicCategories = await getPublicCategories();
@@ -13,7 +14,7 @@ export default async function Footer() {
         <div className={styles.footerCta}>
           <h2>Put your tool in front of people already looking for it.</h2>
           <p>Request an editorial tool profile from $9. Every submission is reviewed before payment, commercial relationships are disclosed and no traffic or ranking is guaranteed.</p>
-          <Link className={styles.ctaButton} href="/submit/">View submission process <span aria-hidden="true">→</span></Link>
+          <Link className={ui.primaryButton} href="/submit/">View submission process <span aria-hidden="true">→</span></Link>
         </div>
       </div>
       <div className={`${styles.shell} ${styles.footerGrid}`}>
@@ -22,7 +23,7 @@ export default async function Footer() {
             <span className={styles.brandMark}>F</span>
             <span>FreemiumAI<span>Tools</span></span>
           </Link>
-          <p>Practical software discovery for small SEO and digital marketing agencies.</p>
+          <p>Practical AI tool reviews for business owners and founders.</p>
           <div className={styles.footerContact}>
             <span>Questions or listing enquiries?</span>
             <a href="mailto:hello@freemiumaitools.com">hello@freemiumaitools.com</a>

@@ -49,7 +49,7 @@ export default function HomepageCategories({ categories }) {
         </div>
 
         <div className={styles.allCategories}>
-          <Link href="/categories/">View all categories <ArrowIcon /></Link>
+          <Link className={ui.primaryButton} href="/categories/">View all categories <ArrowIcon /></Link>
         </div>
       </div>
     </section>

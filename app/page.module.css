@@ -9,6 +9,7 @@
 .heroActions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 32px; }
 .toolTicker { --ticker-edge: #edf5ff; --ticker-mid: #e4effc; --ticker-text: #425474; --ticker-hover: #0d172c; --ticker-border: rgba(47,84,126,.15); position: relative; z-index: 2; overflow: hidden; padding: 20px 0; border-bottom: 1px solid var(--ticker-border); background: radial-gradient(circle at 50% 140%,rgba(55,137,218,.13),transparent 46%),linear-gradient(90deg,var(--ticker-edge),var(--ticker-mid) 50%,var(--ticker-edge)); }
 :global(body[data-theme='dark']) .toolTicker { --ticker-edge: #080b16; --ticker-mid: #0d1530; --ticker-text: rgba(235,239,244,.78); --ticker-hover: #fff; --ticker-border: rgba(157,184,218,.12); }
+.tickerLabel { position: relative; z-index: 3; display: block; margin-bottom: 5px; color: var(--ticker-text); font-size: .65rem; font-weight: 850; letter-spacing: .11em; text-align: center; text-transform: uppercase; }
 .toolTicker::before, .toolTicker::after { content: ''; position: absolute; z-index: 2; top: 0; bottom: 0; width: clamp(32px,8vw,140px); pointer-events: none; }
 .toolTicker::before { left: 0; background: linear-gradient(90deg,var(--ticker-edge),transparent); }
 .toolTicker::after { right: 0; background: linear-gradient(-90deg,var(--ticker-edge),transparent); }

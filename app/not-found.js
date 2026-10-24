@@ -39,7 +39,7 @@ export default function NotFound() {
               </p>
               <div className={styles.actions}>
                 <Link href="/" className={ui.primaryButton}>Go to homepage <span aria-hidden="true">→</span></Link>
-                <Link href="/categories/" className={ui.secondaryButton}>Browse categories</Link>
+                <Link href="/categories/" className={ui.primaryButton}>Browse categories</Link>
               </div>
             </div>
           </div>
