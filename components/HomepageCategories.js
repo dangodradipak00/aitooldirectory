@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowIcon } from './Icons';
+import CategoryIcon, { getCategoryIconStyle } from './CategoryIcon';
 import styles from './HomepageCategories.module.css';
 import ui from '../styles/ui.module.css';
 
@@ -14,10 +15,10 @@ export default function HomepageCategories({ categories }) {
         </div>
 
         <div className={styles.grid}>
-          {categories.map(({ category, tools }, categoryIndex) => (
+          {categories.map(({ category, tools }) => (
             <article className={`${styles.card} ${styles[`accent${category.accent[0].toUpperCase()}${category.accent.slice(1)}`]}`} key={category.id}>
               <header className={styles.cardHeader}>
-                <span className={styles.cardIcon} aria-hidden="true">{String(categoryIndex + 1).padStart(2, '0')}</span>
+                <span className={styles.cardIcon} style={getCategoryIconStyle(category)}><CategoryIcon category={category} /></span>
                 <h3>{category.name}</h3>
                 <span className={styles.total}>{tools.length} {tools.length === 1 ? 'tool' : 'tools'}</span>
               </header>

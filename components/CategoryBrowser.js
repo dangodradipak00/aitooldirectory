@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { ArrowIcon, SearchIcon } from './Icons';
+import CategoryIcon, { getCategoryIconStyle } from './CategoryIcon';
 import styles from './CategoryBrowser.module.css';
 import ui from '../styles/ui.module.css';
 
@@ -36,7 +37,7 @@ export default function CategoryBrowser({ categories }) {
           {results.map((category) => (
             <section className={styles.categoryGroup} key={category.id} aria-labelledby={`${category.id}-title`}>
               <header className={styles.categoryHeading}>
-                <div><span className={styles.categoryNumber}>{String(category.order).padStart(2, '0')}</span><h2 id={`${category.id}-title`}>{category.name}</h2></div>
+                <div><span className={styles.categoryIcon} style={getCategoryIconStyle(category)}><CategoryIcon category={category} /></span><h2 id={`${category.id}-title`}>{category.name}</h2></div>
               </header>
               <div className={styles.subcategoryGrid}>
                 {category.subcategories.map((subcategory) => (

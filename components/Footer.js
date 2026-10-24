@@ -27,6 +27,7 @@ export default async function Footer() {
             <span>Questions or listing enquiries?</span>
             <a href="mailto:hello@freemiumaitools.com">hello@freemiumaitools.com</a>
           </div>
+          <p className={styles.copyright}>© {new Date().getFullYear()} FreemiumAITools</p>
         </div>
         <div>
           <h2>Categories</h2>
@@ -58,9 +59,6 @@ export default async function Footer() {
             <li><Link href="/disclaimer/">Disclaimer</Link></li>
           </ul>
         </div>
-      </div>
-      <div className={`${styles.shell} ${styles.footerBottom}`}>
-        <p>© {new Date().getFullYear()} FreemiumAITools</p>
       </div>
       <div className={`${styles.shell} ${styles.footerWordmark}`} aria-hidden="true">FreemiumAITools</div>
     </footer>

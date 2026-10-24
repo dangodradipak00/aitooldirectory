@@ -9,7 +9,8 @@
 .accentOrange { --accent: var(--orange); }
 .accentBlue { --accent: var(--blue); }
 .cardHeader { min-height: 62px; display: grid; grid-template-columns: 30px minmax(0,1fr) auto; align-items: center; gap: 9px; padding: 8px 9px 11px; border-bottom: 2px solid transparent; border-image: linear-gradient(90deg,#65b8ff,#a467f3,#ff6f91,#ff9d54) 1; }
-.cardIcon { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 8px; color: var(--accent); background: color-mix(in srgb,var(--accent) 10%,var(--surface)); font-size: .64rem; font-weight: 900; }
+.cardIcon { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 8px; color: var(--category-icon-color,var(--accent)); background: linear-gradient(145deg,color-mix(in srgb,var(--category-icon-color,var(--accent)) 18%,var(--surface)),color-mix(in srgb,var(--category-icon-color,var(--accent)) 7%,var(--surface))); box-shadow: inset 0 0 0 1px color-mix(in srgb,var(--category-icon-color,var(--accent)) 12%,transparent); }
+.cardIcon svg { width: 17px; height: 17px; stroke-width: 1.9; }
 .cardHeader h3 { margin: 0; font-size: .84rem; line-height: 1.25; }
 .total { color: var(--muted); font-size: .6rem; font-weight: 800; white-space: nowrap; }
 .toolList { list-style: none; min-height: 280px; max-height: 280px; overflow-y: auto; margin: 10px 0 12px; padding: 0 5px; counter-reset: tool-row; scrollbar-width: thin; }

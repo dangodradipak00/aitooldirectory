@@ -21,7 +21,7 @@
 .detailsLink, .visitLink { min-height: 34px; display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 0 10px; border-radius: 8px; font-size: .76rem; font-weight: 800; }
 .detailsLink { border: 1px solid var(--line); }
 .detailsLink:hover { border-color: #a9cbe7; color: var(--blue); }
-.visitLink { color: white; background: var(--blue); }
+.visitLink { color: white !important; background: var(--blue); }
 .visitLink:hover { background: var(--blue-dark); }
 .visitLink svg { width: 13px; }
 @media (max-width: 620px) { .toolCard { padding: 18px; } .toolCardBottom { align-items: flex-end; } }
